@@ -175,6 +175,59 @@ titan-pomade/
 - `apps/server/.env` - Backend environment variables
 - `packages/database/prisma/schema.prisma` - Database schema
 
+## 🔄 CI/CD Pipeline
+
+The project includes a robust CI/CD pipeline using GitHub Actions. The workflow is defined in `.github/workflows/ci-cd.yml` and includes the following stages:
+
+### Pipeline Stages
+
+1. **Test**
+   - Runs on every push and pull request
+   - Sets up Node.js and PostgreSQL test environment
+   - Installs dependencies with pnpm
+   - Runs linting and type checking
+   - Executes unit and integration tests
+
+2. **Build**
+   - Runs after successful tests on main branch
+   - Builds the Next.js frontend and NestJS backend
+   - Verifies production builds
+
+3. **Deploy** (Production)
+   - Triggered on pushes to main branch
+   - Builds and pushes Docker images to Docker Hub
+   - Deploys to production environment via SSH
+   - Runs database migrations
+
+### Environment Variables
+
+Required GitHub Secrets:
+
+| Secret | Description |
+|--------|-------------|
+| `DOCKERHUB_USERNAME` | Docker Hub username |
+| `DOCKERHUB_TOKEN` | Docker Hub access token |
+| `SSH_PRIVATE_KEY` | Private key for deployment server access |
+| `SSH_HOST` | Production server hostname |
+| `SSH_USER` | SSH username for deployment |
+| `SSH_KNOWN_HOSTS` | Known hosts entry for the server |
+
+### Manual Deployment
+
+To deploy manually:
+
+```bash
+# Build and push Docker images
+docker-compose -f docker/prod/docker-compose.yml build
+docker-compose -f docker/prod/docker-compose.yml push
+
+# Deploy to production
+ssh user@production-server \
+  "cd /path/to/deploy && \
+   docker-compose -f docker/prod/docker-compose.yml pull && \
+   docker-compose -f docker/prod/docker-compose.yml up -d"
+```
+
 ## 🛠 Development Workflow
 
 ### Available Scripts

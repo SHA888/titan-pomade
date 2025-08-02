@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # Database
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-titan_pomade_prod}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-titan_pomade_prod}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MeiliSearch
+  meilisearch:
+    image: getmeili/meilisearch:v1.5
+    ports:
+      - "${MEILISEARCH_PORT:-7700}:7700"
+    environment:
+      MEILI_MASTER_KEY: ${MEILISEARCH_MASTER_KEY:-change_this_in_production}
+    volumes:
+      - meili_data:/meili_data
+    restart: always
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--spider", "--tries=1", "http://localhost:7700/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # API Service
+  api:
+    image: titan-pomade-api:${TAG:-latest}
+    build:
+      context: ../..
+      dockerfile: docker/prod/Dockerfile
+      target: production
+      args:
+        - NODE_ENV=production
+    ports:
+      - "${API_PORT:-3001}:3001"
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      meilisearch:
+        condition: service_healthy
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@postgres:5432/${DB_NAME:-titan_pomade_prod}
+      - REDIS_URL=redis://redis:6379
+      - MEILISEARCH_HOST=http://meilisearch:7700
+      - MEILISEARCH_API_KEY=${MEILISEARCH_MASTER_KEY:-change_this_in_production}
+      - PORT=3001
+
+  # Web Service
+  web:
+    image: titan-pomade-web:${TAG:-latest}
+    build:
+      context: ../..
+      dockerfile: docker/prod/Dockerfile
+      target: production
+      args:
+        - NODE_ENV=production
+    ports:
+      - "${WEB_PORT:-3000}:3000"
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:3001}
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:
+  redis_data:
+  meili_data:
