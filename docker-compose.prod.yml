@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: titan-pomade-db-prod
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/prod/postgres/backups:/backups
+    restart: unless-stopped
+    networks:
+      - titan-network
+
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    container_name: titan-pomade-search-prod
+    environment:
+      - MEILI_MASTER_KEY=${MEILISEARCH_MASTER_KEY}
+      - MEILI_ENV=production
+      - MEILI_NO_ANALYTICS=true
+    ports:
+      - "${MEILISEARCH_PORT}:7700"
+    volumes:
+      - meili_data:/meili_data
+    restart: unless-stopped
+    networks:
+      - titan-network
+
+  redis:
+    image: redis:alpine
+    container_name: titan-pomade-cache-prod
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - titan-network
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/prod/Dockerfile
+    container_name: titan-pomade-app
+    depends_on:
+      - postgres
+      - meilisearch
+      - redis
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+      - MEILISEARCH_HOST=http://meilisearch:7700
+      - MEILISEARCH_API_KEY=${MEILISEARCH_MASTER_KEY}
+    ports:
+      - "${APP_PORT}:3000"
+    restart: unless-stopped
+    networks:
+      - titan-network
+
+networks:
+  titan-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  meili_data:
+  redis_data:
