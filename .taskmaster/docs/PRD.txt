@@ -1,0 +1,191 @@
+<context>
+# Overview  
+Titan Pomade is a modern, full-stack web application template designed to accelerate development of scalable and maintainable web applications. It provides a production-ready foundation with best practices, modern tooling, and a well-architected codebase.
+
+**Problem it solves:** Developers often spend significant time setting up project infrastructure, configuring tools, and implementing common features. Titan Pomade eliminates this overhead.
+
+**Target Users:**
+- Startup developers needing a quick start
+- Full-stack developers building modern web apps
+- Teams requiring consistent architecture
+
+**Value Proposition:**
+- 80% reduction in initial setup time
+- Built-in best practices and security
+- Scalable architecture from day one
+- Comprehensive documentation
+
+# Core Features  
+## 1. Modern Frontend with Next.js 14
+- **What it does:** Provides a React-based frontend with App Router for optimal performance and SEO
+- **Importance:** Delivers fast, SEO-friendly web applications with modern React features
+- **Implementation:** Server components, static/dynamic rendering, and API routes
+
+## 2. Robust Backend with NestJS
+- **What it does:** Offers a modular, testable backend architecture
+- **Importance:** Ensures clean separation of concerns and maintainability
+- **Implementation:** Controllers, services, and modules pattern with dependency injection
+
+## 3. Database & Search
+- **What it does:** PostgreSQL for data persistence and MeiliSearch for fast search
+- **Importance:** Reliable data storage with powerful search capabilities
+- **Implementation:** Prisma ORM for type-safe database access
+
+## 4. Developer Experience
+- **What it does:** Comprehensive development tooling and scripts
+- **Importance:** Streamlines development and ensures code quality
+- **Implementation:** ESLint, Prettier, Husky, and commitlint
+
+# User Experience  
+## User Personas
+1. **Full-stack Developer**
+   - Needs: Fast iteration, type safety, best practices
+   - Goals: Build features quickly without boilerplate setup
+
+2. **DevOps Engineer**
+   - Needs: Reliable deployment, monitoring, scaling
+   - Goals: Easy deployment and maintenance
+
+## Key User Flows
+1. **Project Setup**
+   - Clone repository
+   - Configure environment
+   - Start development servers
+
+2. **Development Workflow**
+   - Write code with TypeScript
+   - Run tests and lints
+   - Commit with conventional commits
+
+## UI/UX Considerations
+- Mobile-first responsive design
+- Dark/light theme support
+- Accessible components
+- Loading and error states
+</context>
+<PRD>
+# Technical Architecture  
+## System Components
+1. **Frontend (Next.js 14)**
+   - App Router for file-based routing
+   - Server Components for better performance
+   - API routes for backend integration
+
+2. **Backend (NestJS)**
+   - RESTful API endpoints
+   - Authentication middleware
+   - Request validation
+   - Error handling
+
+3. **Database Layer**
+   - PostgreSQL for primary data storage
+   - Prisma ORM for type-safe queries
+   - Database migrations
+
+4. **Search (MeiliSearch)**
+   - Full-text search capabilities
+   - Typed search client
+   - Index management
+
+## Data Models
+1. **User**
+   - Authentication details
+   - Profile information
+   - Roles and permissions
+
+2. **Core Entities**
+   - TBD based on specific application needs
+   - Will follow Prisma schema best practices
+
+## APIs and Integrations
+- RESTful API with OpenAPI/Swagger documentation
+- JWT Authentication
+- Role-based access control
+- Rate limiting and security headers
+
+## Infrastructure
+- **Development**
+  - Docker Compose for local development
+  - Hot-reloading for both frontend and backend
+  - Database seeding
+
+- **Production**
+  - Containerized with Docker
+  - Scalable deployment options
+  - Environment-based configuration
+
+# Development Roadmap  
+## Phase 1: Core Infrastructure (Weeks 1-2)
+- [ ] Set up monorepo structure
+- [ ] Configure Next.js with TypeScript and Tailwind
+- [ ] Set up NestJS backend with basic modules
+- [ ] Configure Prisma with PostgreSQL
+- [ ] Implement basic CI/CD pipeline
+
+## Phase 2: Authentication & User Management (Weeks 3-4)
+- [ ] JWT authentication
+- [ ] User registration and login flows
+- [ ] Password reset functionality
+- [ ] Role-based access control
+
+## Phase 3: Core Features (Weeks 5-8)
+- [ ] Implement CRUD operations
+- [ ] Set up MeiliSearch integration
+- [ ] Add API documentation
+- [ ] Implement testing strategy
+
+## Future Enhancements
+- [ ] Real-time features with WebSockets
+- [ ] File upload service
+- [ ] Advanced analytics dashboard
+- [ ] Multi-language support
+
+# Logical Dependency Chain
+1. **Foundation Layer**
+   - Monorepo setup
+   - Development environment
+   - CI/CD pipeline
+
+2. **Core Services**
+   - Database and ORM
+   - Authentication
+   - API structure
+
+3. **Business Features**
+   - Domain-specific modules
+   - Search functionality
+   - Advanced queries
+
+4. **Enhancements**
+   - Performance optimizations
+   - Advanced features
+   - Developer experience improvements
+
+# Risks and Mitigations  
+## Technical Challenges
+- **Risk:** Complex state management in Next.js
+  - *Mitigation:* Start with React Context, move to Zustand if needed
+
+- **Risk:** Database performance at scale
+  - *Mitigation:* Implement indexing, query optimization, and caching
+
+## MVP Scope
+- **Risk:** Scope creep
+  - *Mitigation:* Strictly define MVP features and defer enhancements
+
+## Resource Constraints
+- **Risk:** Limited development resources
+  - *Mitigation:* Prioritize must-have features, use existing solutions when possible
+
+# Appendix  
+## Technical Specifications
+- Node.js 18+
+- PostgreSQL 16
+- Docker 24+
+- pnpm 8+
+
+## Development Tools
+- ESLint + Prettier for code quality
+- Husky for git hooks
+- Jest for testing
+- GitHub Actions for CI/CD
