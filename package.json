@@ -1,0 +1,33 @@
+{
+  "name": "titan-pomade",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "scripts": {
+    "prepare": "husky install",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"pnpm --filter @titan-pomade/web dev\" \"pnpm --filter @titan-pomade/api start:dev\"",
+    "build": "pnpm --filter @titan-pomade/web build && pnpm --filter @titan-pomade/api build",
+    "start": "node apps/api/dist/main.js"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@types/node": "^24.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "concurrently": "^9.2.0",
+    "eslint": "^9.32.0",
+    "eslint-config-next": "15.4.5",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "prettier": "^3.6.2",
+    "typescript": "^5.8.3"
+  },
+  "packageManager": "pnpm@8.0.0"
+}

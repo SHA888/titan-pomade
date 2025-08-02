@@ -52,7 +52,7 @@ A modern, full-stack web application template built with cutting-edge technologi
 - [Node.js](https://nodejs.org/) 18+
 - [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
 - [PostgreSQL](https://www.postgresql.org/download/) 16
-- [pnpm](https://pnpm.io/) (recommended) or [npm](https://www.npmjs.com/)
+- [pnpm](https://pnpm.io/) (required package manager)
 
 ### Quick Start (For Experienced Developers)
 
@@ -87,8 +87,8 @@ node -v
 docker --version
 docker-compose --version
 
-# Check package manager
-pnpm --version || npm --version
+# Check pnpm version
+pnpm --version
 ```
 
 ### Installation
@@ -101,11 +101,7 @@ pnpm --version || npm --version
 
 2. Install dependencies:
    ```bash
-   # Using pnpm (recommended)
    pnpm install
-   
-   # Or using npm
-   npm install
    ```
 
 3. Set up environment variables:

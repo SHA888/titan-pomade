@@ -1,0 +1,8 @@
+packages:
+  # All packages in apps/*
+  - 'apps/*'
+  # All packages in packages/*
+  - 'packages/*'
+  # Exclude test and example packages
+  - '!**/test/**'
+  - '!**/examples/**'
