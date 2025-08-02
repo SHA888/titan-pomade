@@ -1,0 +1,148 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Set up Monorepo Structure",
+        "description": "Initialize the project repository with a monorepo structure using pnpm workspaces to manage both frontend and backend packages.",
+        "details": "1. Initialize a new Git repository\n2. Set up pnpm workspaces with the following structure:\n```\n/\n├── apps/\n│   ├── web/ (Next.js frontend)\n│   └── api/ (NestJS backend)\n├── packages/ (shared libraries)\n├── docker/ (Docker configuration files)\n├── .github/ (GitHub Actions workflows)\n└── pnpm-workspace.yaml\n```\n3. Configure root-level package.json with workspace scripts\n4. Set up ESLint, Prettier, and TypeScript configurations at the root level\n5. Configure Husky for git hooks and commitlint for conventional commits\n6. Create comprehensive README.md with setup instructions",
+        "testStrategy": "Verify the repository structure is correct and all configuration files are properly set up. Test that pnpm commands work correctly across workspaces. Ensure git hooks run properly on commit and push.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "Configure Next.js 14 Frontend",
+        "description": "Set up the Next.js 14 frontend application with App Router, TypeScript, and Tailwind CSS.",
+        "details": "1. Create a new Next.js 14 application in the apps/web directory\n```bash\npnpm create next-app@latest apps/web --ts --tailwind --eslint --app --src-dir\n```\n2. Configure the App Router structure with proper layouts and pages\n3. Set up server and client components architecture\n4. Configure environment variables (.env.local, .env.development, etc.)\n5. Implement responsive layouts with Tailwind CSS\n6. Set up dark/light theme support\n7. Create base UI components with accessibility in mind\n8. Configure API route handlers for backend communication",
+        "testStrategy": "Run the Next.js development server and verify it starts without errors. Test responsive design across different viewport sizes. Verify theme switching functionality. Run accessibility checks using tools like axe-core.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Set up NestJS Backend",
+        "description": "Initialize and configure the NestJS backend application with TypeScript and module structure.",
+        "details": "1. Create a new NestJS application in the apps/api directory\n```bash\npnpm add -g @nestjs/cli\nnest new apps/api\n```\n2. Configure the application module structure following NestJS best practices\n3. Set up environment configuration using @nestjs/config\n4. Implement global exception filters and validation pipes\n5. Configure logging using nestjs-pino\n6. Set up health check endpoints\n7. Implement rate limiting and security headers\n8. Configure CORS for frontend integration\n9. Set up OpenAPI/Swagger documentation",
+        "testStrategy": "Run the NestJS application and verify it starts without errors. Test health check endpoints. Verify that validation pipes and exception filters work correctly. Ensure Swagger documentation is generated properly.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Configure Prisma with PostgreSQL",
+        "description": "Set up Prisma ORM with PostgreSQL database and implement initial schema and migrations.",
+        "details": "1. Install Prisma in the backend project\n```bash\ncd apps/api\npnpm add prisma @prisma/client\npnpm add -D prisma\nnpx prisma init\n```\n2. Configure PostgreSQL connection in .env file\n3. Define initial Prisma schema with User model:\n```prisma\nmodel User {\n  id        String   @id @default(uuid())\n  email     String   @unique\n  password  String\n  name      String?\n  role      Role     @default(USER)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n```\n4. Set up database migrations\n5. Create a PrismaService in NestJS for dependency injection\n6. Implement database seeding for development\n7. Configure Prisma Client generation in build process",
+        "testStrategy": "Run migrations and verify they apply correctly. Test database connections and basic CRUD operations. Verify that seeding works properly in development environment. Ensure Prisma Client is generated correctly during build.",
+        "priority": "high",
+        "dependencies": [
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Implement JWT Authentication",
+        "description": "Develop a complete authentication system with JWT tokens, user registration, login, and password reset functionality.",
+        "details": "1. Create an Auth module in NestJS\n2. Implement user registration endpoint with validation\n3. Set up password hashing using bcrypt\n4. Implement JWT token generation and validation\n5. Create login endpoint with credential validation\n6. Implement refresh token mechanism\n7. Create password reset flow with email verification\n8. Implement JWT Guard for protected routes\n9. Create frontend authentication context and hooks\n10. Implement login, registration, and password reset forms in Next.js\n11. Set up protected routes in the frontend\n12. Implement token refresh logic in API calls",
+        "testStrategy": "Test user registration with valid and invalid data. Verify login works with correct credentials and fails with incorrect ones. Test JWT token validation and expiration. Verify password reset flow works end-to-end. Test protected routes with and without valid authentication.",
+        "priority": "high",
+        "dependencies": [
+          2,
+          3,
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Implement Role-Based Access Control",
+        "description": "Develop a role-based access control system to manage user permissions across the application.",
+        "details": "1. Extend the User model with roles and permissions\n2. Create a Roles decorator in NestJS\n3. Implement RolesGuard for endpoint protection\n4. Create permission-based access control for fine-grained authorization\n5. Implement role assignment and management endpoints\n6. Create admin interface for user role management\n7. Implement UI components that conditionally render based on user roles\n8. Add role checking in frontend routes\n9. Create higher-order components for role-based rendering",
+        "testStrategy": "Test role-based route protection with different user roles. Verify that users can only access authorized endpoints. Test role assignment and management functionality. Verify that UI components correctly show or hide based on user roles.",
+        "priority": "medium",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Set up MeiliSearch Integration",
+        "description": "Integrate MeiliSearch for fast, typo-tolerant search functionality across the application.",
+        "details": "1. Add MeiliSearch to Docker Compose for local development\n2. Install MeiliSearch client in the backend\n```bash\npnpm add meilisearch\n```\n3. Create a SearchService in NestJS\n4. Implement index creation and management\n5. Set up data synchronization between PostgreSQL and MeiliSearch\n6. Create search endpoints with filtering and pagination\n7. Implement typed search client in the frontend\n8. Create search UI components with autocomplete\n9. Implement search results page with filtering options\n10. Add real-time search suggestions",
+        "testStrategy": "Verify MeiliSearch indexes are created correctly. Test search functionality with various queries, including typos. Verify that data synchronization works properly. Test search UI components for correct rendering and interaction.",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 8,
+        "title": "Implement Docker Development Environment",
+        "description": "Set up Docker and Docker Compose for local development with hot-reloading for both frontend and backend.",
+        "details": "1. Create Dockerfile for Next.js frontend\n2. Create Dockerfile for NestJS backend\n3. Create Dockerfile for PostgreSQL with initialization scripts\n4. Create Dockerfile for MeiliSearch\n5. Set up Docker Compose configuration with service definitions\n6. Configure volume mappings for persistent data\n7. Set up environment variables for each service\n8. Configure network settings for inter-service communication\n9. Implement hot-reloading for development\n10. Create development scripts in package.json for Docker operations",
+        "testStrategy": "Verify that all services start correctly with Docker Compose. Test hot-reloading functionality for both frontend and backend. Verify that services can communicate with each other. Test that data persists across container restarts.",
+        "priority": "medium",
+        "dependencies": [
+          2,
+          3,
+          4,
+          7
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "Set up CI/CD Pipeline",
+        "description": "Implement a continuous integration and deployment pipeline using GitHub Actions.",
+        "details": "1. Create GitHub Actions workflow for CI\n```yaml\nname: CI\non:\n  push:\n    branches: [main, develop]\n  pull_request:\n    branches: [main, develop]\n```\n2. Configure linting and type checking jobs\n3. Set up testing jobs for both frontend and backend\n4. Implement build verification\n5. Create deployment workflow for staging and production\n6. Configure environment-specific variables\n7. Set up Docker image building and pushing to registry\n8. Implement deployment to target environments\n9. Configure deployment notifications\n10. Set up status checks for pull requests",
+        "testStrategy": "Verify that CI workflow runs on push and pull requests. Test that linting, type checking, and tests run correctly. Verify that builds complete successfully. Test deployment to staging environment.",
+        "priority": "medium",
+        "dependencies": [
+          1,
+          2,
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Implement CRUD Operations and API Documentation",
+        "description": "Develop standardized CRUD operations for core entities and comprehensive API documentation.",
+        "details": "1. Create a base CRUD service in NestJS\n2. Implement generic repository pattern\n3. Create DTOs for request validation and response transformation\n4. Implement pagination, filtering, and sorting\n5. Set up comprehensive error handling\n6. Configure Swagger/OpenAPI documentation\n7. Create API versioning strategy\n8. Implement API rate limiting\n9. Create frontend service layer for API communication\n10. Implement optimistic updates in the UI\n11. Create reusable form components for CRUD operations",
+        "testStrategy": "Test CRUD operations for all entities with valid and invalid data. Verify that pagination, filtering, and sorting work correctly. Test API documentation for accuracy and completeness. Verify that rate limiting works as expected.",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-08-02T01:19:48.474Z",
+      "updated": "2025-08-02T01:19:48.474Z",
+      "description": "Tasks for master context"
+    }
+  }
+}
