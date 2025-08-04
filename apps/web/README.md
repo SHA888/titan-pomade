@@ -1,32 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Titan Pomade - Web Application
 
-## Getting Started
+This is the frontend application for Titan Pomade, built with Next.js 14, TypeScript, and Tailwind CSS.
 
-First, run the development server:
+## 🚀 Getting Started
 
-```bash
-pnpm dev
-# or
-bun dev
+### Prerequisites
+
+- Node.js 18.0.0 or later
+- pnpm 8.x
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+3. Copy the example environment file and update the values:
+   ```bash
+   cp .env.example .env.local
+   ```
+4. Start the development server:
+   ```bash
+   pnpm dev
+   ```
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## 🏗️ Project Structure
+
+```
+src/
+├── app/                  # App Router pages and layouts
+├── components/           # Reusable UI components
+│   ├── ui/              # Base UI components (Button, Input, etc.)
+│   ├── layout/          # Layout components
+│   └── features/        # Feature-specific components
+├── lib/                 # Utility functions and API client
+└── styles/              # Global styles and theme
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `pnpm dev` - Start development server
+- `pnpm build` - Create a production build
+- `pnpm start` - Start production server
+- `pnpm lint` - Run ESLint
+- `pnpm format` - Format code with Prettier
 
-## Learn More
+### Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+Create a `.env.local` file with the following variables:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```env
+# App Environment
+NODE_ENV=development
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# API Configuration
+NEXT_PUBLIC_API_URL=http://localhost:3000/api
 
-## Deploy on Vercel
+# Authentication (to be configured later)
+# NEXT_PUBLIC_AUTH0_DOMAIN=
+# NEXT_PUBLIC_AUTH0_CLIENT_ID=
+# NEXT_PUBLIC_AUTH0_AUDIENCE=
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🎨 Styling
+
+This project uses:
+
+- [Tailwind CSS](https://tailwindcss.com/) for utility-first styling
+- [shadcn/ui](https://ui.shadcn.com/) for accessible UI components
+- [Lucide Icons](https://lucide.dev/) for icons
+
+## 📦 Dependencies
+
+- Next.js 14 with App Router
+- TypeScript
+- Tailwind CSS
+- next-themes for dark/light mode
+- sonner for toast notifications
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
