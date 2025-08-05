@@ -26,15 +26,6 @@
       "@shared/*": ["../../packages/shared/src/*"]
     }
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "test",
-    "**/*spec.ts",
-    "**/*.test.ts"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.spec.ts", "src/**/*.test.ts", "prisma/**/*.ts"],
+  "exclude": ["node_modules", "dist", "test"]
 }

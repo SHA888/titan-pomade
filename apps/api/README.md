@@ -33,17 +33,81 @@ The API is configured using environment variables. Copy `.env.example` to `.env`
 
 - `NODE_ENV` - Application environment (development, production, test)
 - `PORT` - Port to run the API server on (default: 5000)
-- `DATABASE_URL` - PostgreSQL connection string
+- `DATABASE_URL` - PostgreSQL connection string (e.g., `postgresql://user:password@localhost:5432/titan_pomade`)
 - `JWT_SECRET` - Secret key for JWT token signing
 - `THROTTLE_TTL` - Rate limiting window in seconds (default: 60)
 - `THROTTLE_LIMIT` - Maximum requests per window (default: 100)
 
+## Database
+
+The application uses PostgreSQL with Prisma ORM for database operations.
+
+### Prisma Setup
+
+1. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+
+2. Set up the database:
+   ```bash
+   # Apply migrations and seed the database
+   pnpm db:setup
+   ```
+
+### Available Database Scripts
+
+- `pnpm db:generate` - Generate Prisma Client
+- `pnpm db:migrate` - Run database migrations in development
+- `pnpm db:migrate:deploy` - Apply migrations in production
+- `pnpm db:seed` - Seed the database with test data
+- `pnpm db:studio` - Open Prisma Studio for database management
+
+### Database Schema
+
+The database schema is defined in `prisma/schema.prisma`. After making changes to the schema:
+
+1. Create a new migration:
+   ```bash
+   pnpm db:migrate --name descriptive_name
+   ```
+
+2. Test your changes:
+   ```bash
+   pnpm test
+   ```
+
+### Seeding the Database
+
+Test data can be seeded using:
+```bash
+pnpm db:seed
+```
+
+#### Default Test Users
+
+- **Admin User**
+  - Email: `admin@example.com`
+  - Password: `admin123`
+  - Role: `ADMIN`
+
+- **Regular User**
+  - Email: `user@example.com`
+  - Password: `user123`
+  - Role: `USER`
+
+### Database Documentation
+
+For detailed database documentation, see [prisma/README.md](./prisma/README.md).
+
 ## API Endpoints
 
 ### Health Check
+
 - `GET /health` - Check API health status
 
 ### API Documentation
+
 - `GET /api/docs` - Swagger documentation (available in non-production environments)
 
 ## Project Setup

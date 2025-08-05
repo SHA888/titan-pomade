@@ -12,30 +12,34 @@ This guide provides detailed instructions for setting up and working with the Ti
 ## Getting Started
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/yourusername/titan-pomade.git
    cd titan-pomade
    ```
 
 2. **Install dependencies**
+
    ```bash
    pnpm install
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.example .env
    # Edit .env with your configuration
    ```
 
 4. **Start development services**
+
    ```bash
    # Start all services (PostgreSQL, Redis, MeiliSearch)
    docker-compose up -d
-   
+
    # Run database migrations
    pnpm db:migrate
-   
+
    # Start development servers
    pnpm dev
    ```
@@ -68,11 +72,13 @@ This guide provides detailed instructions for setting up and working with the Ti
 ## Git Workflow
 
 1. Create a new branch for your feature or bugfix:
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
 
 2. Make your changes and commit them:
+
    ```bash
    git add .
    git commit -m "feat: add new feature"
@@ -83,6 +89,7 @@ This guide provides detailed instructions for setting up and working with the Ti
 ## Testing
 
 Run tests with:
+
 ```bash
 pnpm test
 ```

@@ -13,12 +13,14 @@ A modern, full-stack web application template built with cutting-edge technologi
 ## 🚀 Features
 
 ### Frontend
+
 - ⚡ **Next.js 14** - React framework with App Router for optimized performance and SEO
 - 🎨 **Tailwind CSS** - Utility-first CSS framework for beautiful, responsive UIs
 - 🛠 **TypeScript** - Type safety across the entire stack
 - 🌐 **API Integration** - Seamless communication with the backend API
 
 ### Backend
+
 - 🏗 **NestJS** - Scalable Node.js server framework with robust architecture
 - 🔐 **Authentication** - JWT-based authentication system
 - 🔄 **Rate Limiting** - Built-in request throttling for API protection
@@ -26,27 +28,29 @@ A modern, full-stack web application template built with cutting-edge technologi
 - 📚 **API Documentation** - Auto-generated with Swagger/OpenAPI (available at `/api/docs`)
 
 ### Database & Search
+
 - 🗄 **PostgreSQL 16** - Robust relational database
 - 🔍 **MeiliSearch** - Lightning-fast search experience
 - 🛢 **Prisma** - Type-safe database client and migrations
 
 ### DevOps
+
 - 🐳 **Docker** - Containerization for consistent environments
 - ✅ **Testing** - Comprehensive test suite with Jest
 - 🔄 **CI/CD** - GitHub Actions for automated testing and deployment
 
 ## 🛠 Tech Stack
 
-| Layer       | Technology          | Version | Purpose | Documentation |
-|-------------|---------------------|---------|----------|----------------|
-| **Frontend** | [Next.js](https://nextjs.org/) | 14.x | React framework with server components | [Docs](https://nextjs.org/docs) |
-| **Styling** | [Tailwind CSS](https://tailwindcss.com/) | 3.x | Utility-first CSS framework | [Docs](https://tailwindcss.com/docs) |
-| **Backend** | [NestJS](https://nestjs.com/) | 10.x | Node.js server framework | [Docs](https://docs.nestjs.com/) |
-| **Database** | [PostgreSQL](https://www.postgresql.org/) | 16.x | Relational database | [Docs](https://www.postgresql.org/docs/) |
-| **ORM** | [Prisma](https://www.prisma.io/) | 5.x | Type-safe database client | [Docs](https://www.prisma.io/docs) |
-| **Search** | [MeiliSearch](https://www.meilisearch.com/) | 1.x | Lightning-fast search | [Docs](https://docs.meilisearch.com/) |
-| **Container** | [Docker](https://www.docker.com/) | 24.x | Containerization | [Docs](https://docs.docker.com/) |
-| **Language** | [TypeScript](https://www.typescriptlang.org/) | 5.x | Type-safe JavaScript | [Docs](https://www.typescriptlang.org/docs/) |
+| Layer         | Technology                                    | Version | Purpose                                | Documentation                                |
+| ------------- | --------------------------------------------- | ------- | -------------------------------------- | -------------------------------------------- |
+| **Frontend**  | [Next.js](https://nextjs.org/)                | 14.x    | React framework with server components | [Docs](https://nextjs.org/docs)              |
+| **Styling**   | [Tailwind CSS](https://tailwindcss.com/)      | 3.x     | Utility-first CSS framework            | [Docs](https://tailwindcss.com/docs)         |
+| **Backend**   | [NestJS](https://nestjs.com/)                 | 10.x    | Node.js server framework               | [Docs](https://docs.nestjs.com/)             |
+| **Database**  | [PostgreSQL](https://www.postgresql.org/)     | 16.x    | Relational database                    | [Docs](https://www.postgresql.org/docs/)     |
+| **ORM**       | [Prisma](https://www.prisma.io/)              | 5.x     | Type-safe database client              | [Docs](https://www.prisma.io/docs)           |
+| **Search**    | [MeiliSearch](https://www.meilisearch.com/)   | 1.x     | Lightning-fast search                  | [Docs](https://docs.meilisearch.com/)        |
+| **Container** | [Docker](https://www.docker.com/)             | 24.x    | Containerization                       | [Docs](https://docs.docker.com/)             |
+| **Language**  | [TypeScript](https://www.typescriptlang.org/) | 5.x     | Type-safe JavaScript                   | [Docs](https://www.typescriptlang.org/docs/) |
 
 ## 🚀 Getting Started
 
@@ -109,30 +113,34 @@ pnpm --version
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/yourusername/titan-pomade.git
    cd titan-pomade
    ```
 
 2. Install dependencies:
+
    ```bash
    pnpm install
    ```
 
 3. Set up environment variables:
+
    ```bash
    cp .env.example .env
    # Update the .env file with your configuration
    ```
 
 4. Start the development environment:
+
    ```bash
    # Start all services with Docker Compose
    docker-compose up -d
-   
+
    # Run database migrations
    pnpm db:migrate
-   
+
    # Start development servers
    pnpm dev
    ```
@@ -218,14 +226,14 @@ The project includes a robust CI/CD pipeline using GitHub Actions. The workflow 
 
 Required GitHub Secrets:
 
-| Secret | Description |
-|--------|-------------|
-| `DOCKERHUB_USERNAME` | Docker Hub username |
-| `DOCKERHUB_TOKEN` | Docker Hub access token |
-| `SSH_PRIVATE_KEY` | Private key for deployment server access |
-| `SSH_HOST` | Production server hostname |
-| `SSH_USER` | SSH username for deployment |
-| `SSH_KNOWN_HOSTS` | Known hosts entry for the server |
+| Secret               | Description                              |
+| -------------------- | ---------------------------------------- |
+| `DOCKERHUB_USERNAME` | Docker Hub username                      |
+| `DOCKERHUB_TOKEN`    | Docker Hub access token                  |
+| `SSH_PRIVATE_KEY`    | Private key for deployment server access |
+| `SSH_HOST`           | Production server hostname               |
+| `SSH_USER`           | SSH username for deployment              |
+| `SSH_KNOWN_HOSTS`    | Known hosts entry for the server         |
 
 ### Manual Deployment
 
@@ -395,10 +403,11 @@ Please use the [GitHub Issues](https://github.com/yourusername/titan-pomade/issu
 ### Production Deployment
 
 1. Set up a production environment:
+
    ```bash
    # Build the application
    pnpm build
-   
+
    # Start production services
    pnpm start
    ```
@@ -417,6 +426,7 @@ Please use the [GitHub Issues](https://github.com/yourusername/titan-pomade/issu
 ## 🗺 Roadmap
 
 ### Upcoming Features
+
 - [ ] User authentication with social providers
 - [ ] Real-time features with WebSockets
 - [ ] Admin dashboard
@@ -424,6 +434,7 @@ Please use the [GitHub Issues](https://github.com/yourusername/titan-pomade/issu
 - [ ] Enhanced security headers
 
 ### In Progress
+
 - [x] Basic authentication
 - [x] API documentation
 - [x] Docker setup

@@ -1,5 +1,12 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Loading } from '@/components/ui/loading';
 
@@ -7,7 +14,7 @@ export default function ComponentsPage() {
   return (
     <div className="container mx-auto p-6 space-y-8">
       <h1 className="text-4xl font-bold">UI Components</h1>
-      
+
       {/* Buttons */}
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold">Buttons</h2>

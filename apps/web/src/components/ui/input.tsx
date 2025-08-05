@@ -16,7 +16,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, error, helperText, ...props }, ref) => {
     // Extract base input props (excluding our custom ones)
     const inputProps = props as Omit<BaseInputProps, 'className'>;
-    
+
     return (
       <div className="w-full space-y-1">
         <input
@@ -32,12 +32,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {...inputProps}
         />
         {helperText && (
-          <p 
-            className={cn(
-              'text-sm',
-              error ? 'text-destructive' : 'text-muted-foreground'
-            )}
-          >
+          <p className={cn('text-sm', error ? 'text-destructive' : 'text-muted-foreground')}>
             {helperText}
           </p>
         )}

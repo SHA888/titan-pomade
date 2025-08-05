@@ -1,6 +1,4 @@
 module.exports = {
-  presets: [
-    ['next/babel', { 'preset-react': { runtime: 'automatic' } }],
-  ],
+  presets: [['next/babel', { 'preset-react': { runtime: 'automatic' } }]],
   plugins: [],
 };

@@ -10,9 +10,10 @@ import type { NestExpressApplication } from '@nestjs/platform-express';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CoreModule } from './core/core.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
-  imports: [CoreModule.forRoot()],
+  imports: [CoreModule.forRoot(), PrismaModule],
   controllers: [AppController],
   providers: [
     AppService,

@@ -9,6 +9,7 @@ https://api.yourdomain.com/v1
 ```
 
 For local development:
+
 ```
 http://localhost:5000/v1
 ```
@@ -20,10 +21,11 @@ Most API endpoints require authentication using JWT (JSON Web Tokens).
 ### Obtaining a Token
 
 1. **Login**
+
    ```http
    POST /auth/login
    Content-Type: application/json
-   
+
    {
      "email": "user@example.com",
      "password": "yourpassword"
@@ -31,6 +33,7 @@ Most API endpoints require authentication using JWT (JSON Web Tokens).
    ```
 
    Response:
+
    ```json
    {
      "success": true,
@@ -68,12 +71,14 @@ Content-Type: application/json
 ### Users
 
 #### Get Current User
+
 ```http
 GET /users/me
 Authorization: Bearer your.jwt.token.here
 ```
 
 #### Update User
+
 ```http
 PATCH /users/me
 Authorization: Bearer your.jwt.token.here
@@ -88,16 +93,19 @@ Content-Type: application/json
 ### Products
 
 #### List Products
+
 ```http
 GET /products
 ```
 
 #### Get Product by ID
+
 ```http
 GET /products/:id
 ```
 
 #### Create Product (Admin Only)
+
 ```http
 POST /products
 Authorization: Bearer your.jwt.token.here
@@ -114,6 +122,7 @@ Content-Type: application/json
 ## Search
 
 ### Search Products
+
 ```http
 GET /search?q=query&limit=10&offset=0
 ```
@@ -121,6 +130,7 @@ GET /search?q=query&limit=10&offset=0
 ## Error Handling
 
 ### Error Response Format
+
 ```json
 {
   "success": false,
@@ -133,6 +143,7 @@ GET /search?q=query&limit=10&offset=0
 ```
 
 ### Common Error Codes
+
 - `400` - Bad Request
 - `401` - Unauthorized
 - `403` - Forbidden
@@ -150,9 +161,11 @@ GET /search?q=query&limit=10&offset=0
 ### Available Webhooks
 
 #### Order Created
+
 Triggered when a new order is created.
 
 **Payload:**
+
 ```json
 {
   "event": "order.created",
@@ -171,6 +184,7 @@ Triggered when a new order is created.
 ## Versioning
 
 API versioning is handled through the URL path:
+
 ```
 /v1/endpoint
 ```
@@ -178,6 +192,7 @@ API versioning is handled through the URL path:
 ## Changelog
 
 ### v1.0.0 (2025-08-02)
+
 - Initial API release
 - User authentication
 - Product management

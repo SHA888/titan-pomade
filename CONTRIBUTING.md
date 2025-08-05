@@ -97,6 +97,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/) for our c
 ```
 
 ### Types:
+
 - `feat`: A new feature
 - `fix`: A bug fix
 - `docs`: Documentation only changes
@@ -107,6 +108,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/) for our c
 - `chore`: Changes to the build process or auxiliary tools and libraries
 
 ### Examples:
+
 ```
 feat(auth): add password reset functionality
 
@@ -118,6 +120,7 @@ Closes #123
 ## Reporting Issues
 
 When reporting issues, please include:
+
 - A clear title and description
 - Steps to reproduce the issue
 - Expected vs actual behavior
@@ -128,6 +131,7 @@ When reporting issues, please include:
 ## Feature Requests
 
 We welcome feature requests! Please:
+
 1. Check if the feature has already been requested
 2. Explain why this feature would be useful
 3. Provide as much detail as possible

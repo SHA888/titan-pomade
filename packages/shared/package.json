@@ -9,7 +9,11 @@
     "test": "jest",
     "lint": "eslint \"{src,test}/**/*.ts\""
   },
-  "keywords": ["shared", "utilities", "types"],
+  "keywords": [
+    "shared",
+    "utilities",
+    "types"
+  ],
   "author": "",
   "license": "MIT"
 }

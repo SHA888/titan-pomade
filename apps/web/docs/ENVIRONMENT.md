@@ -5,6 +5,7 @@ This document describes the environment variables used in the Next.js applicatio
 ## Setup
 
 1. Copy `.env.example` to `.env.local`:
+
    ```bash
    cp .env.example .env.local
    ```
@@ -13,34 +14,34 @@ This document describes the environment variables used in the Next.js applicatio
 
 ## Required Variables
 
-| Variable | Description | Required | Default |
-|----------|-------------|:--------:|:-------:|
-| `NODE_ENV` | Application environment (development, test, production) | Yes | `development` |
-| `NEXT_PUBLIC_API_URL` | Base URL for API requests | Yes | `http://localhost:3000` |
+| Variable              | Description                                             | Required |         Default         |
+| --------------------- | ------------------------------------------------------- | :------: | :---------------------: |
+| `NODE_ENV`            | Application environment (development, test, production) |   Yes    |      `development`      |
+| `NEXT_PUBLIC_API_URL` | Base URL for API requests                               |   Yes    | `http://localhost:3000` |
 
 ## Authentication (Auth0)
 
 These variables are required if using Auth0 for authentication:
 
-| Variable | Description | Required |
-|----------|-------------|:--------:|
-| `NEXT_PUBLIC_AUTH0_DOMAIN` | Your Auth0 domain | No |
-| `NEXT_PUBLIC_AUTH0_CLIENT_ID` | Your Auth0 client ID | No |
-| `NEXT_PUBLIC_AUTH0_AUDIENCE` | Your Auth0 API audience | No |
+| Variable                      | Description             | Required |
+| ----------------------------- | ----------------------- | :------: |
+| `NEXT_PUBLIC_AUTH0_DOMAIN`    | Your Auth0 domain       |    No    |
+| `NEXT_PUBLIC_AUTH0_CLIENT_ID` | Your Auth0 client ID    |    No    |
+| `NEXT_PUBLIC_AUTH0_AUDIENCE`  | Your Auth0 API audience |    No    |
 
 ## Feature Flags
 
 Feature flags allow you to enable/disable features without deploying new code:
 
-| Variable | Description | Default |
-|----------|-------------|:-------:|
+| Variable                      | Description          | Default |
+| ----------------------------- | -------------------- | :-----: |
 | `NEXT_PUBLIC_FEATURE_EXAMPLE` | Example feature flag | `false` |
 
 ## Analytics
 
-| Variable | Description | Required |
-|----------|-------------|:--------:|
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Google Analytics Measurement ID | No |
+| Variable                        | Description                     | Required |
+| ------------------------------- | ------------------------------- | :------: |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Google Analytics Measurement ID |    No    |
 
 ## Validation
 

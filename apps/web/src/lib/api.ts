@@ -29,11 +29,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
       errorData = { message: 'An unknown error occurred' };
     }
 
-    throw new ApiError(
-      errorData.message || response.statusText,
-      response.status,
-      errorData
-    );
+    throw new ApiError(errorData.message || response.statusText, response.status, errorData);
   }
 
   // Handle 204 No Content
@@ -90,23 +86,14 @@ export const api = {
   get: <T>(endpoint: string, options?: Omit<RequestOptions, 'method'>) =>
     apiRequest<T>(endpoint, { ...options, method: 'GET' }),
 
-  post: <T>(
-    endpoint: string,
-    body?: unknown,
-    options?: Omit<RequestOptions, 'method' | 'body'>
-  ) => apiRequest<T>(endpoint, { ...options, method: 'POST', body }),
+  post: <T>(endpoint: string, body?: unknown, options?: Omit<RequestOptions, 'method' | 'body'>) =>
+    apiRequest<T>(endpoint, { ...options, method: 'POST', body }),
 
-  put: <T>(
-    endpoint: string,
-    body?: unknown,
-    options?: Omit<RequestOptions, 'method' | 'body'>
-  ) => apiRequest<T>(endpoint, { ...options, method: 'PUT', body }),
+  put: <T>(endpoint: string, body?: unknown, options?: Omit<RequestOptions, 'method' | 'body'>) =>
+    apiRequest<T>(endpoint, { ...options, method: 'PUT', body }),
 
-  patch: <T>(
-    endpoint: string,
-    body?: unknown,
-    options?: Omit<RequestOptions, 'method' | 'body'>
-  ) => apiRequest<T>(endpoint, { ...options, method: 'PATCH', body }),
+  patch: <T>(endpoint: string, body?: unknown, options?: Omit<RequestOptions, 'method' | 'body'>) =>
+    apiRequest<T>(endpoint, { ...options, method: 'PATCH', body }),
 
   delete: <T>(endpoint: string, options?: Omit<RequestOptions, 'method'>) =>
     apiRequest<T>(endpoint, { ...options, method: 'DELETE' }),

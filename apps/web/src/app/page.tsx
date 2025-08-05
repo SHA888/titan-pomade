@@ -9,7 +9,8 @@ export default function Home() {
             Welcome to Titan Pomade Stack
           </h1>
           <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
-            A modern, full-stack web application template built with Next.js 14, NestJS, and Tailwind CSS.
+            A modern, full-stack web application template built with Next.js 14, NestJS, and
+            Tailwind CSS.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <a

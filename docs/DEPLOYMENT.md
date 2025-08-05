@@ -12,36 +12,40 @@ This guide explains how to deploy the Titan Pomade Stack to production environme
 ## Production Deployment with Docker
 
 1. **Prepare your server**
+
    ```bash
    # Update system packages
    sudo apt update && sudo apt upgrade -y
-   
+
    # Install Docker
    curl -fsSL https://get.docker.com -o get-docker.sh
    sudo sh get-docker.sh
-   
+
    # Install Docker Compose
    sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
    sudo chmod +x /usr/local/bin/docker-compose
    ```
 
 2. **Clone the repository**
+
    ```bash
    git clone https://github.com/yourusername/titan-pomade.git
    cd titan-pomade
    ```
 
 3. **Configure environment**
+
    ```bash
    cp .env.example .env.production
    # Edit .env.production with your production settings
    ```
 
 4. **Start the application**
+
    ```bash
    # Start all services
    docker-compose -f docker-compose.prod.yml up -d
-   
+
    # Run database migrations
    docker-compose -f docker-compose.prod.yml exec app pnpm db:migrate
    ```
@@ -130,6 +134,7 @@ server {
 ### Logs
 
 View container logs:
+
 ```bash
 docker-compose -f docker-compose.prod.yml logs -f
 ```
@@ -137,6 +142,7 @@ docker-compose -f docker-compose.prod.yml logs -f
 ### Monitoring
 
 Set up monitoring with:
+
 - [Prometheus](https://prometheus.io/)
 - [Grafana](https://grafana.com/)
 - [Sentry](https://sentry.io/)
@@ -146,6 +152,7 @@ Set up monitoring with:
 ### Database Backups
 
 Create a backup:
+
 ```bash
 docker exec -t your_postgres_container pg_dump -U your_user -d your_db > backup_$(date +%Y-%m-%d).sql
 ```
@@ -185,6 +192,7 @@ cat backup_file.sql | docker exec -i your_postgres_container psql -U your_user -
 ### Security Updates
 
 Regularly update:
+
 - Node.js
 - Docker images
 - Dependencies (run `pnpm update` and test before deploying)

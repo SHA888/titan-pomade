@@ -8,7 +8,9 @@ describe('Input Component', () => {
     render(<Input placeholder="Enter text" />);
     const input = screen.getByPlaceholderText('Enter text');
     expect(input).toBeInTheDocument();
-    expect(input).toHaveClass('flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background');
+    expect(input).toHaveClass(
+      'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background'
+    );
   });
 
   it('applies custom className', () => {
@@ -34,7 +36,7 @@ describe('Input Component', () => {
     render(<Input error helperText="This is an error" />);
     const input = screen.getByRole('textbox');
     const helperText = screen.getByText('This is an error');
-    
+
     expect(input).toHaveClass('border-destructive');
     expect(helperText).toHaveClass('text-destructive');
   });
