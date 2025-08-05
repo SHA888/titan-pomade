@@ -32,7 +32,7 @@ model Product {
   id          String    @id @default(uuid())
   name        String
   description String
-  price       Float
+  price       Decimal    @default(0) @db.Decimal(12, 2)
   stock       Int       @default(0)
   imageUrl    String?
   category    String
@@ -74,7 +74,7 @@ model Order {
   userId      String
   user        User        @relation(fields: [userId], references: [id])
   items       OrderItem[]
-  total       Float
+  total       Decimal    @default(0) @db.Decimal(12, 2)
   status      OrderStatus @default(PENDING)
   shippingAddress String?
   paymentMethod  String?
@@ -90,7 +90,7 @@ model OrderItem {
   productId String
   product   Product   @relation(fields: [productId], references: [id])
   quantity  Int
-  price     Float
+  price     Decimal    @default(0) @db.Decimal(12, 2)
 }
 
 // Product reviews

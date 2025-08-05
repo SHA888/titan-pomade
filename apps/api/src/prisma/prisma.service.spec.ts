@@ -41,7 +41,8 @@ describe('PrismaService', () => {
     if (!service) {
       throw new Error('Service not initialized');
     }
-    // This will throw if the connection fails
-    await expect(service.$queryRaw`SELECT 1`).resolves.not.toThrow();
+    // Verify the query resolves successfully and returns a result
+    const result = await service.$queryRaw`SELECT 1`;
+    expect(result).toBeDefined();
   });
 });

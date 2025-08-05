@@ -3,11 +3,11 @@ import type { Config } from '@jest/types';
 const config: Config.InitialOptions = {
   moduleFileExtensions: ['js', 'json', 'ts'],
   rootDir: 'src',
-  testRegex: '.*\\.spec\\.ts$',
+  testRegex: '.*\\.(spec|test)\\.(t|j)sx?$',
   transform: {
-    '^.+\\.(t|j)s$': 'ts-jest',
+    '^.+\\.(t|j)sx?$': 'ts-jest',
   },
-  collectCoverageFrom: ['**/*.(t|j)s'],
+  collectCoverageFrom: ['**/*.{ts,js,tsx,jsx}'],
   coverageDirectory: '../coverage',
   testEnvironment: 'node',
   moduleNameMapper: {
