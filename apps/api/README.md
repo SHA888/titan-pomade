@@ -23,25 +23,70 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+The Titan Pomade API is a NestJS-based backend service that provides the core functionality for the application. It's designed with scalability, security, and developer experience in mind.
 
-## Project setup
+## Configuration
+
+The API is configured using environment variables. Copy `.env.example` to `.env` and update the values as needed.
+
+### Key Environment Variables
+
+- `NODE_ENV` - Application environment (development, production, test)
+- `PORT` - Port to run the API server on (default: 5000)
+- `DATABASE_URL` - PostgreSQL connection string
+- `JWT_SECRET` - Secret key for JWT token signing
+- `THROTTLE_TTL` - Rate limiting window in seconds (default: 60)
+- `THROTTLE_LIMIT` - Maximum requests per window (default: 100)
+
+## API Endpoints
+
+### Health Check
+- `GET /health` - Check API health status
+
+### API Documentation
+- `GET /api/docs` - Swagger documentation (available in non-production environments)
+
+## Project Setup
+
+### Prerequisites
+
+- Node.js 18+
+- PostgreSQL 16+
+- pnpm 8+
+
+### Installation
 
 ```bash
-$ pnpm install
+# Install dependencies
+pnpm install
+
+# Copy environment variables
+cp .env.example .env
+
+# Run database migrations
+pnpm prisma migrate dev
 ```
 
-## Compile and run the project
+## Running the Application
+
+### Development
 
 ```bash
-# development
-$ pnpm run start
+# Start in development mode with hot-reload
+pnpm run start:dev
 
-# watch mode
-$ pnpm run start:dev
+# Access the API at http://localhost:5000
+# Access Swagger docs at http://localhost:5000/api/docs
+```
 
-# production mode
-$ pnpm run start:prod
+### Production
+
+```bash
+# Build the application
+pnpm run build
+
+# Start in production mode
+pnpm run start:prod
 ```
 
 ## Run tests

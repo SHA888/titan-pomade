@@ -97,10 +97,10 @@ Write tests in the `__tests__` directory next to the code being tested.
 
 ## API Documentation
 
-Access the API documentation at `http://localhost:3001/api/docs` when the server is running.
+Access the API documentation at `http://localhost:5000/api/docs` when the server is running.
 
 ## Troubleshooting
 
 - **Database connection issues**: Ensure PostgreSQL is running and credentials in `.env` are correct
-- **Port conflicts**: Check if ports 3000, 3001, 5432, 6379, or 7700 are in use
+- **Port conflicts**: Check if ports 3000, 5000, 5432, 6379, or 7700 are in use
 - **Docker issues**: Try rebuilding containers with `docker-compose up -d --build`

@@ -10,7 +10,7 @@ https://api.yourdomain.com/v1
 
 For local development:
 ```
-http://localhost:3001/v1
+http://localhost:5000/v1
 ```
 
 ## Authentication

@@ -16,11 +16,14 @@ A modern, full-stack web application template built with cutting-edge technologi
 - ⚡ **Next.js 14** - React framework with App Router for optimized performance and SEO
 - 🎨 **Tailwind CSS** - Utility-first CSS framework for beautiful, responsive UIs
 - 🛠 **TypeScript** - Type safety across the entire stack
+- 🌐 **API Integration** - Seamless communication with the backend API
 
 ### Backend
 - 🏗 **NestJS** - Scalable Node.js server framework with robust architecture
 - 🔐 **Authentication** - JWT-based authentication system
-- 📚 **API Documentation** - Auto-generated with Swagger/OpenAPI
+- 🔄 **Rate Limiting** - Built-in request throttling for API protection
+- 📊 **Health Checks** - System health monitoring endpoints
+- 📚 **API Documentation** - Auto-generated with Swagger/OpenAPI (available at `/api/docs`)
 
 ### Database & Search
 - 🗄 **PostgreSQL 16** - Robust relational database
@@ -54,6 +57,12 @@ A modern, full-stack web application template built with cutting-edge technologi
 - [PostgreSQL](https://www.postgresql.org/download/) 16
 - [pnpm](https://pnpm.io/) (required package manager)
 
+### Ports
+
+- **Frontend**: `3000` (http://localhost:3000)
+- **Backend API**: `5000` (http://localhost:5000)
+- **Database**: `5432`
+
 ### Quick Start (For Experienced Developers)
 
 ```bash
@@ -71,10 +80,16 @@ cp .env.example .env
 docker-compose up -d
 
 # Run database migrations
-pnpm db:migrate
+pnpm prisma migrate dev
 
 # Start development servers
 pnpm dev
+
+# Access the application:
+# - Frontend: http://localhost:3000
+# - Backend API: http://localhost:5000
+# - API Documentation: http://localhost:5000/api/docs
+# - Health Check: http://localhost:5000/health
 ```
 
 ### Verify Prerequisites
@@ -295,7 +310,7 @@ MEILISEARCH_API_KEY=your_meilisearch_master_key
    - Run `pnpm db:migrate` to apply migrations
 
 2. **Port conflicts**
-   - Check if ports 3000 (frontend), 3001 (backend), and 5432 (PostgreSQL) are available
+   - Check if ports 3000 (frontend), 5000 (backend), and 5432 (PostgreSQL) are available
    - Update ports in `.env` if needed
 
 3. **Docker issues**
