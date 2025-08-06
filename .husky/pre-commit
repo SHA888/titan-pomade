@@ -1,0 +1,6 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Lint each workspace separately
+pnpm --filter @titan-pomade/api lint
+pnpm --filter @titan-pomade/web lint
