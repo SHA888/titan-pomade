@@ -11,9 +11,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CoreModule } from './core/core.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [CoreModule.forRoot(), PrismaModule],
+  imports: [CoreModule.forRoot(), PrismaModule, AuthModule],
   controllers: [AppController],
   providers: [
     AppService,

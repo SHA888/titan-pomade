@@ -42,7 +42,7 @@
         "testStrategy": "Run migrations and verify they apply correctly. Test database connections and basic CRUD operations. Verify that seeding works properly in development environment. Ensure Prisma Client is generated correctly during build.",
         "priority": "high",
         "dependencies": [3],
-        "status": "in-progress",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -53,7 +53,7 @@
         "testStrategy": "Test user registration with valid and invalid data. Verify login works with correct credentials and fails with incorrect ones. Test JWT token validation and expiration. Verify password reset flow works end-to-end. Test protected routes with and without valid authentication.",
         "priority": "high",
         "dependencies": [2, 3, 4],
-        "status": "pending",
+        "status": "in-progress",
         "subtasks": []
       },
       {
