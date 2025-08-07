@@ -9,10 +9,13 @@ import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
 import { PrismaModule } from '../prisma/prisma.module';
+import { PasswordResetService } from './password-reset.service';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
     PrismaModule,
+    MailModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -28,6 +31,7 @@ import { PrismaModule } from '../prisma/prisma.module';
   controllers: [AuthController],
   providers: [
     AuthService,
+    PasswordResetService,
     JwtStrategy,
     RefreshTokenStrategy,
     JwtAuthGuard,

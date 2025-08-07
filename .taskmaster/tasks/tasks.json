@@ -53,7 +53,7 @@
         "testStrategy": "Test user registration with valid and invalid data. Verify login works with correct credentials and fails with incorrect ones. Test JWT token validation and expiration. Verify password reset flow works end-to-end. Test protected routes with and without valid authentication.",
         "priority": "high",
         "dependencies": [2, 3, 4],
-        "status": "in-progress",
+        "status": "done",
         "subtasks": []
       },
       {

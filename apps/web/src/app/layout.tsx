@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { GeistSans, GeistMono } from 'geist/font';
 import { ThemeProvider } from '@/components/theme/theme-provider';
+import { AuthProvider } from '@/contexts/auth/AuthContext';
 import { cn } from '@/lib/utils';
 import './globals.css';
 
@@ -87,7 +88,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <AuthProvider>
+            {children}
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -1,5 +1,34 @@
 import { toast } from 'sonner';
 
+// Token management
+const TOKEN_KEY = 'auth_tokens';
+
+interface AuthTokens {
+  accessToken: string;
+  refreshToken: string;
+}
+
+const getTokens = (): AuthTokens | null => {
+  if (typeof window === 'undefined') return null;
+  const tokens = localStorage.getItem(TOKEN_KEY);
+  return tokens ? JSON.parse(tokens) : null;
+};
+
+const setTokens = (tokens: AuthTokens): void => {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(TOKEN_KEY, JSON.stringify(tokens));
+  }
+};
+
+const clearTokens = (): void => {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem(TOKEN_KEY);
+  }
+};
+
+// API base URL
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
+
 type RequestOptions = {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   body?: unknown;
@@ -46,10 +75,20 @@ export async function apiRequest<T = void>(
 ): Promise<T> {
   const { method = 'GET', body, headers = {}, credentials = 'same-origin', signal } = options;
 
+  // Get tokens for the request
+  const tokens = getTokens();
+  const authHeaders: HeadersInit = {};
+  
+  // Add authorization header if we have a token
+  if (tokens?.accessToken) {
+    authHeaders['Authorization'] = `Bearer ${tokens.accessToken}`;
+  }
+
   const config: RequestInit = {
     method,
     headers: {
       'Content-Type': 'application/json',
+      ...authHeaders,
       ...headers,
     },
     credentials,
@@ -62,9 +101,52 @@ export async function apiRequest<T = void>(
 
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || '';
-    const url = `${baseUrl}${endpoint}`;
-    const response = await fetch(url, config);
-    return await handleResponse<T>(response);
+    return fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}${endpoint}`, config)
+    .then(async (response) => {
+      // Handle token refresh if 401 and we have a refresh token
+      if (response.status === 401 && tokens?.refreshToken) {
+        try {
+          const newTokens = await refreshAuthToken(tokens.refreshToken);
+          if (newTokens) {
+            // Update the Authorization header with the new token
+            config.headers = {
+              ...config.headers,
+              'Authorization': `Bearer ${newTokens.accessToken}`
+            };
+            // Retry the original request
+            return fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}${endpoint}`, config)
+              .then(handleResponse<T>);
+          }
+        } catch (refreshError) {
+          // If refresh fails, clear tokens and redirect to login
+          clearTokens();
+          if (typeof window !== 'undefined') {
+            window.location.href = '/auth/login';
+          }
+          throw new Error('Session expired. Please log in again.');
+        }
+      }
+      return handleResponse<T>(response);
+    })
+    .catch((error) => {
+      if (error instanceof ApiError) {
+        // Handle specific error statuses
+        if (error.status === 401) {
+          // Clear tokens and redirect to login
+          clearTokens();
+          if (typeof window !== 'undefined') {
+            window.location.href = '/auth/login';
+          }
+        } else if (error.status >= 500) {
+          toast.error('Server error. Please try again later.');
+        } else {
+          toast.error(error.message || 'An error occurred');
+        }
+      } else {
+        toast.error('Network error. Please check your connection.');
+      }
+      throw error;
+    });
   } catch (error) {
     if (error instanceof ApiError) {
       // Show error toast for client-side errors (400-499)
@@ -78,6 +160,30 @@ export async function apiRequest<T = void>(
       toast.error('Network error. Please check your connection.');
     }
     throw error;
+  }
+}
+
+// Auth token refresh function
+async function refreshAuthToken(refreshToken: string): Promise<AuthTokens | null> {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/auth/refresh`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ refreshToken }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to refresh token');
+    }
+
+    const tokens = await response.json();
+    setTokens(tokens);
+    return tokens;
+  } catch (error) {
+    clearTokens();
+    return null;
   }
 }
 
