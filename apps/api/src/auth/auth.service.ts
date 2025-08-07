@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
+import { EmailVerificationService } from './email-verification.service';
 import {
   SignUpDto,
   SignInDto,
@@ -15,9 +16,10 @@ export class AuthService {
     private prisma: PrismaService,
     private jwtService: JwtService,
     private configService: ConfigService,
+    private emailVerificationService: EmailVerificationService,
   ) {}
 
-  async signUp(signUpDto: SignUpDto): Promise<AuthResponseDto> {
+  async signUp(signUpDto: SignUpDto): Promise<{ message: string }> {
     const { email, password, name } = signUpDto;
 
     // Check if user already exists
@@ -39,29 +41,50 @@ export class AuthService {
         password: hashedPassword,
         name,
         role: 'USER', // Default role
+        isEmailVerified: false, // Email not verified yet
       },
     });
 
-    // Generate tokens
-    return this.generateTokens(user.id, user.email, user.role);
+    try {
+      // Generate and send verification email
+      const token =
+        await this.emailVerificationService.createEmailVerificationToken(
+          user.id,
+        );
+      await this.emailVerificationService.sendVerificationEmail(
+        user.email,
+        token,
+      );
+
+      return {
+        message:
+          'Registration successful. Please check your email to verify your account.',
+      };
+    } catch {
+      // If sending email fails, delete the user to prevent unverified accounts
+      await this.prisma.user.delete({ where: { id: user.id } });
+      throw new Error('Failed to send verification email. Please try again.');
+    }
   }
 
   async signIn(signInDto: SignInDto): Promise<AuthResponseDto> {
     const { email, password } = signInDto;
 
-    // Find user
+    // Find user by email
     const user = await this.prisma.user.findUnique({
       where: { email },
     });
 
-    if (!user) {
+    // Check if user exists and password is correct
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Verify password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
+    // Check if email is verified
+    if (!user.isEmailVerified) {
+      throw new UnauthorizedException(
+        'Please verify your email before signing in',
+      );
     }
 
     // Generate tokens

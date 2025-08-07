@@ -23,7 +23,7 @@ export class PasswordResetService {
     // Generate a secure random token
     const token = randomBytes(32).toString('hex');
     const hashedToken = this.hashToken(token);
-    
+
     // Set expiration time
     const expiresAt = addHours(new Date(), this.RESET_TOKEN_EXPIRES_IN_HOURS);
 
@@ -55,7 +55,9 @@ export class PasswordResetService {
     });
 
     if (!resetToken) {
-      throw new UnauthorizedException('Invalid or expired password reset token');
+      throw new UnauthorizedException(
+        'Invalid or expired password reset token',
+      );
     }
 
     if (resetToken.expiresAt < now) {
@@ -71,7 +73,7 @@ export class PasswordResetService {
 
   async resetPassword(token: string, newPassword: string): Promise<void> {
     const { userId } = await this.validatePasswordResetToken(token);
-    
+
     // Update user's password
     await this.prisma.user.update({
       where: { id: userId },

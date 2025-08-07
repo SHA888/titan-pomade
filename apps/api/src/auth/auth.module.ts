@@ -10,6 +10,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
 import { PrismaModule } from '../prisma/prisma.module';
 import { PasswordResetService } from './password-reset.service';
+import { EmailVerificationService } from './email-verification.service';
 import { MailModule } from '../mail/mail.module';
 
 @Module({
@@ -32,6 +33,7 @@ import { MailModule } from '../mail/mail.module';
   providers: [
     AuthService,
     PasswordResetService,
+    EmailVerificationService,
     JwtStrategy,
     RefreshTokenStrategy,
     JwtAuthGuard,

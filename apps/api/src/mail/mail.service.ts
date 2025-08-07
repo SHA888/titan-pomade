@@ -18,30 +18,47 @@ export class MailService {
     this.appName = this.configService.get<string>('APP_NAME') || 'Titan Pomade';
   }
 
-  async sendPasswordResetEmail(email: string, resetToken: string): Promise<void> {
-    const resetUrl = `${this.frontendUrl}/reset-password?token=${encodeURIComponent(resetToken)}`;
-
+  async sendEmail(
+    to: string,
+    subject: string,
+    template: string,
+    context: Record<string, unknown> = {},
+  ): Promise<void> {
     const mailOptions: ISendMailOptions = {
-      to: email,
-      subject: `${this.appName} - Password Reset Request`,
-      template: './password-reset',
+      to,
+      subject,
+      template: `./${template}`,
       context: {
         appName: this.appName,
-        resetUrl,
         year: new Date().getFullYear(),
+        ...context,
       },
     };
 
     try {
       await this.mailerService.sendMail(mailOptions);
-      this.logger.log(`Password reset email sent to ${email}`);
+      this.logger.log(`Email sent to ${to} with template ${template}`);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.stack : String(error);
       this.logger.error(
-        `Failed to send password reset email to ${email}`,
+        `Failed to send email to ${to} with template ${template}`,
         errorMessage,
       );
-      throw new Error('Failed to send password reset email');
+      throw new Error(`Failed to send email: ${errorMessage}`);
     }
+  }
+
+  async sendPasswordResetEmail(
+    email: string,
+    resetToken: string,
+  ): Promise<void> {
+    const resetUrl = `${this.frontendUrl}/reset-password?token=${encodeURIComponent(resetToken)}`;
+
+    await this.sendEmail(
+      email,
+      `${this.appName} - Password Reset Request`,
+      'password-reset',
+      { resetUrl },
+    );
   }
 }

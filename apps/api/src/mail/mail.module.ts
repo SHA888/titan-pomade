@@ -1,35 +1,70 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MailerModule } from '@nestjs-modules/mailer';
+import { MailerModule as NestMailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { join } from 'path';
 import { MailService } from './mail.service';
+import type { MailerOptions } from '@nestjs-modules/mailer/dist/interfaces/mailer-options.interface';
+import type { Options as SMTPOptions } from 'nodemailer/lib/smtp-transport';
 
 @Module({
   imports: [
-    MailerModule.forRootAsync({
+    NestMailerModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        transport: {
-          host: configService.get<string>('mail.host'),
-          port: configService.get<number>('mail.port'),
-          secure: configService.get<boolean>('mail.secure'),
+      useFactory: (configService: ConfigService): MailerOptions => {
+        // Get configuration values with proper type assertions
+        const getConfig = <T>(
+          key: string,
+          isRequired = true,
+        ): T | undefined => {
+          const value = configService.get<T>(key);
+          if (isRequired && (value === undefined || value === null)) {
+            throw new Error(`Missing required mail configuration: ${key}`);
+          }
+          return value;
+        };
+
+        // Get all required configuration values
+        const host = getConfig<string>('mail.host');
+        const port = getConfig<number>('mail.port');
+        const secure = getConfig<boolean>('mail.secure', false) ?? false;
+        const user = getConfig<string>('mail.user');
+        const password = getConfig<string>('mail.password');
+
+        const mailFrom = getConfig<{ name?: string; email?: string }>(
+          'mail.from',
+        );
+
+        if (!mailFrom?.name || !mailFrom?.email) {
+          throw new Error('Missing required mail.from configuration');
+        }
+
+        const { name: fromName, email: fromEmail } = mailFrom;
+
+        const transport: SMTPOptions = {
+          host,
+          port,
+          secure,
           auth: {
-            user: configService.get<string>('mail.user'),
-            pass: configService.get<string>('mail.password'),
+            user,
+            pass: password,
           },
-        },
-        defaults: {
-          from: `"${configService.get<string>('mail.from.name')}" <${configService.get<string>('mail.from.email')}>`,
-        },
-        template: {
-          dir: join(__dirname, 'templates'),
-          adapter: new HandlebarsAdapter(),
-          options: {
-            strict: true,
+        };
+
+        return {
+          transport: transport,
+          defaults: {
+            from: `"${fromName}" <${fromEmail}>`,
           },
-        },
-      }),
+          template: {
+            dir: join(__dirname, 'templates'),
+            adapter: new HandlebarsAdapter(),
+            options: {
+              strict: true,
+            },
+          },
+        };
+      },
       inject: [ConfigService],
     }),
   ],

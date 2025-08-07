@@ -3,6 +3,9 @@ export interface User {
   email: string;
   name: string;
   role: string;
+  isEmailVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface AuthTokens {

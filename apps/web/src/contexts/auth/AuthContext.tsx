@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { api } from '@/lib/api';
+import { getErrorMessage } from '@/lib/error-utils';
 import { User, AuthContextType, AuthTokens } from './types';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -19,7 +20,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const userData = await api.get<User>('/auth/me');
         setUser(userData);
-      } catch (error) {
+      } catch (err) {
+        console.error('Auth check failed:', err);
         setUser(null);
       } finally {
         setIsLoading(false);
@@ -29,39 +31,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     checkAuth();
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string): Promise<void> => {
     try {
       setIsLoading(true);
-      const data = await api.post<AuthTokens>('/auth/signin', { email, password });
+      // The tokens are handled by the API client interceptor
+      await api.post<AuthTokens>('/auth/signin', { email, password });
       
-      // Store tokens in local storage (handled by api.ts)
-      // The api client will handle setting the tokens
-      
-      // Get user data
+      // Get user data after successful login
       const userData = await api.get<User>('/auth/me');
       setUser(userData);
       
+      // Check if email is verified
+      if (!userData.isEmailVerified) {
+        toast.info('Please verify your email address');
+        router.push('/auth/verify-email');
+        return;
+      }
+      
       toast.success('Logged in successfully');
       router.push('/dashboard');
-    } catch (error) {
-      toast.error('Invalid email or password');
-      throw error;
+    } catch (error: unknown) {
+      const message = getErrorMessage(error) || 'Invalid email or password';
+      toast.error(message);
+      throw new Error(message);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const register = async (name: string, email: string, password: string) => {
+  const register = async (name: string, email: string, password: string): Promise<void> => {
     try {
       setIsLoading(true);
       await api.post('/auth/signup', { name, email, password });
       
-      // Auto-login after registration
-      await login(email, password);
-    } catch (error: any) {
-      const errorMessage = error?.response?.data?.message || 'Registration failed';
-      toast.error(errorMessage);
-      throw error;
+      // Inform user to verify their email
+      toast.success('Registration successful! Please check your email to verify your account.');
+      router.push('/auth/verify-email');
+    } catch (error: unknown) {
+      const message = getErrorMessage(error) || 'Registration failed';
+      toast.error(message);
+      throw new Error(message);
     } finally {
       setIsLoading(false);
     }
@@ -77,7 +86,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const tokens = await api.post<AuthTokens>('/auth/refresh');
       return tokens.accessToken;
-    } catch (error) {
+    } catch (err) {
+      console.error('Token refresh failed:', err);
       logout();
       return null;
     }
@@ -87,9 +97,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await api.post('/auth/forgot-password', { email });
       toast.success('Password reset link sent to your email');
-    } catch (error) {
-      toast.error('Failed to send password reset email');
-      throw error;
+    } catch (err) {
+      const errorMessage = getErrorMessage(err) || 'Failed to send password reset email';
+      toast.error(errorMessage);
+      throw err;
     }
   };
 
@@ -98,9 +109,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await api.post('/auth/reset-password', { token, newPassword });
       toast.success('Password reset successful. Please log in with your new password.');
       router.push('/auth/login');
-    } catch (error) {
-      toast.error('Failed to reset password');
-      throw error;
+    } catch (err) {
+      const errorMessage = getErrorMessage(err) || 'Failed to reset password';
+      toast.error(errorMessage);
+      throw err;
     }
   };
 
