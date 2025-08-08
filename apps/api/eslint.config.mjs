@@ -9,7 +9,8 @@ export default tseslint.config(
     ignores: [
       'eslint.config.mjs',
       '**/app.controller.spec.ts',
-      '**/test/app.e2e-spec.ts'
+      '**/test/app.e2e-spec.ts',
+      'prisma/seed.js'
     ],
   },
   eslint.configs.recommended,
