@@ -74,6 +74,16 @@ model PasswordResetToken {
   @@index([token])
 }
 
+// Role to Permission mapping (DB-driven permissions)
+model RolePermission {
+  id         String     @id @default(uuid())
+  role       Role
+  permission Permission
+  createdAt  DateTime   @default(now())
+
+  @@unique([role, permission])
+}
+
 // Shopping cart
 model Cart {
   id        String    @id @default(uuid())
@@ -140,6 +150,13 @@ model Review {
 enum Role {
   USER
   ADMIN
+}
+
+enum Permission {
+  VIEW_DASHBOARD
+  MANAGE_USERS
+  MANAGE_PRODUCTS
+  MANAGE_ORDERS
 }
 
 enum OrderStatus {

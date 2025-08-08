@@ -9,6 +9,8 @@ import { PERMISSIONS_KEY } from '../decorators/permissions.decorator';
 import { Permission, hasPermission } from '../permissions';
 import { Role } from '@prisma/client';
 import type { Request } from 'express';
+import { PrismaService } from '../../prisma/prisma.service';
+import { Prisma } from '@prisma/client';
 
 interface RequestWithUser extends Request {
   user: {
@@ -20,9 +22,12 @@ interface RequestWithUser extends Request {
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
-  constructor(private readonly reflector: Reflector) {}
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly prisma: PrismaService,
+  ) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredPermissions = this.reflector.getAllAndOverride<Permission[]>(
       PERMISSIONS_KEY,
       [context.getHandler(), context.getClass()],
@@ -37,9 +42,29 @@ export class PermissionsGuard implements CanActivate {
       throw new ForbiddenException('No user role found');
     }
 
-    const allowed = requiredPermissions.every((perm) =>
-      hasPermission(user.role, perm),
-    );
+    // Try DB-driven permissions first; fallback to static mapping if table not found or empty
+    let allowed = false;
+    try {
+      const rows: Array<{ permission: string }> = await this.prisma.$queryRaw(
+        Prisma.sql`SELECT permission FROM "RolePermission" WHERE role = ${user.role}`,
+      );
+      if (rows && rows.length > 0) {
+        const dbPerms = new Set(rows.map((r) => r.permission));
+        allowed = requiredPermissions.every((perm) =>
+          dbPerms.has(String(perm)),
+        );
+      } else {
+        // No DB rows – fallback to static mapping
+        allowed = requiredPermissions.every((perm) =>
+          hasPermission(user.role, perm),
+        );
+      }
+    } catch {
+      // Likely table doesn't exist yet (no migration). Fallback to static mapping.
+      allowed = requiredPermissions.every((perm) =>
+        hasPermission(user.role, perm),
+      );
+    }
 
     if (!allowed) {
       throw new ForbiddenException(
