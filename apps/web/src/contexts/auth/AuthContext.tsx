@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { api } from '@/lib/api';
+import { api, setTokens, clearTokens } from '@/lib/api';
 import { getErrorMessage } from '@/lib/error-utils';
 import { User, AuthContextType, AuthTokens } from './types';
 
@@ -34,20 +34,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string): Promise<void> => {
     try {
       setIsLoading(true);
-      // The tokens are handled by the API client interceptor
-      await api.post<AuthTokens>('/auth/signin', { email, password });
-      
+      // Get tokens and store them for subsequent requests
+      const tokens = await api.post<AuthTokens>('/auth/signin', { email, password });
+      setTokens(tokens);
+
       // Get user data after successful login
       const userData = await api.get<User>('/auth/me');
       setUser(userData);
-      
+
       // Check if email is verified
       if (!userData.isEmailVerified) {
         toast.info('Please verify your email address');
         router.push('/auth/verify-email');
         return;
       }
-      
+
       toast.success('Logged in successfully');
       router.push('/dashboard');
     } catch (error: unknown) {
@@ -63,7 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setIsLoading(true);
       await api.post('/auth/signup', { name, email, password });
-      
+
       // Inform user to verify their email
       toast.success('Registration successful! Please check your email to verify your account.');
       router.push('/auth/verify-email');
@@ -77,7 +78,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = () => {
-    // The api client will handle clearing the tokens
+    // Clear stored tokens and reset user state
+    clearTokens();
     setUser(null);
     router.push('/auth/login');
   };

@@ -64,7 +64,7 @@
         "testStrategy": "Test role-based route protection with different user roles. Verify that users can only access authorized endpoints. Test role assignment and management functionality. Verify that UI components correctly show or hide based on user roles.",
         "priority": "medium",
         "dependencies": [5],
-        "status": "pending",
+        "status": "in-progress",
         "subtasks": []
       },
       {

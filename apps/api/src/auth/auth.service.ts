@@ -99,6 +99,21 @@ export class AuthService {
     return this.generateTokens(userId, email, role);
   }
 
+  async getMe(userId: string) {
+    return this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        isEmailVerified: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  }
+
   private async generateTokens(
     userId: string,
     email: string,

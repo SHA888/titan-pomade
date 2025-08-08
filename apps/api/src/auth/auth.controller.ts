@@ -113,6 +113,15 @@ export class AuthController {
     return this.authService.signIn(signInDto);
   }
 
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Get current user profile' })
+  @ApiResponse({ status: 200, description: 'Current user details' })
+  async getMe(@GetUser() user: JwtPayload) {
+    return this.authService.getMe(user.sub);
+  }
+
   @Post('refresh')
   @UseGuards(RefreshTokenGuard)
   @HttpCode(HttpStatus.OK)

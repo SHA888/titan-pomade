@@ -12,9 +12,10 @@ import { AppService } from './app.service';
 import { CoreModule } from './core/core.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
-  imports: [CoreModule.forRoot(), PrismaModule, AuthModule],
+  imports: [CoreModule.forRoot(), PrismaModule, AuthModule, AdminModule],
   controllers: [AppController],
   providers: [
     AppService,

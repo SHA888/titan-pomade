@@ -8,6 +8,8 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
+import { RolesGuard } from './guards/roles.guard';
+import { PermissionsGuard } from './guards/permissions.guard';
 import { PrismaModule } from '../prisma/prisma.module';
 import { PasswordResetService } from './password-reset.service';
 import { EmailVerificationService } from './email-verification.service';
@@ -38,7 +40,15 @@ import { MailModule } from '../mail/mail.module';
     RefreshTokenStrategy,
     JwtAuthGuard,
     RefreshTokenGuard,
+    RolesGuard,
+    PermissionsGuard,
   ],
-  exports: [JwtAuthGuard, RefreshTokenGuard, JwtModule],
+  exports: [
+    JwtAuthGuard,
+    RefreshTokenGuard,
+    RolesGuard,
+    PermissionsGuard,
+    JwtModule,
+  ],
 })
 export class AuthModule {}

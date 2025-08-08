@@ -20,7 +20,7 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (password !== confirmPassword) {
       toast.error('Passwords do not match');
       return;
@@ -50,10 +50,7 @@ export default function RegisterPage() {
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
           Or{' '}
-          <Link
-            href="/auth/login"
-            className="font-medium text-indigo-600 hover:text-indigo-500"
-          >
+          <Link href="/auth/login" className="font-medium text-indigo-600 hover:text-indigo-500">
             sign in to your existing account
           </Link>
         </p>
@@ -108,9 +105,7 @@ export default function RegisterPage() {
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
               </div>
-              <p className="mt-1 text-xs text-gray-500">
-                Must be at least 8 characters long
-              </p>
+              <p className="mt-1 text-xs text-gray-500">Must be at least 8 characters long</p>
             </div>
 
             <div>

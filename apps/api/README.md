@@ -45,6 +45,7 @@ The application uses PostgreSQL with Prisma ORM for database operations.
 ### Prisma Setup
 
 1. Install dependencies:
+
    ```bash
    pnpm install
    ```
@@ -68,6 +69,7 @@ The application uses PostgreSQL with Prisma ORM for database operations.
 The database schema is defined in `prisma/schema.prisma`. After making changes to the schema:
 
 1. Create a new migration:
+
    ```bash
    pnpm db:migrate --name descriptive_name
    ```
@@ -80,6 +82,7 @@ The database schema is defined in `prisma/schema.prisma`. After making changes t
 ### Seeding the Database
 
 Test data can be seeded using:
+
 ```bash
 pnpm db:seed
 ```

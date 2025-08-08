@@ -5,11 +5,7 @@ export const metadata: Metadata = {
   description: 'Authentication forms built using the components.',
 };
 
-export default function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container relative h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
@@ -33,9 +29,8 @@ export default function AuthLayout({
           <div className="relative z-20 mt-auto">
             <blockquote className="space-y-2">
               <p className="text-lg">
-                &ldquo;This library has saved me countless hours of work and
-                helped me deliver stunning designs to my clients faster than ever
-                before.&rdquo;
+                &ldquo;This library has saved me countless hours of work and helped me deliver
+                stunning designs to my clients faster than ever before.&rdquo;
               </p>
               <footer className="text-sm">Sofia Davis</footer>
             </blockquote>

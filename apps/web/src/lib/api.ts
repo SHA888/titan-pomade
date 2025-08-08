@@ -78,7 +78,7 @@ export async function apiRequest<T = void>(
   // Get tokens for the request
   const tokens = getTokens();
   const authHeaders: HeadersInit = {};
-  
+
   // Add authorization header if we have a token
   if (tokens?.accessToken) {
     authHeaders['Authorization'] = `Bearer ${tokens.accessToken}`;
@@ -100,53 +100,51 @@ export async function apiRequest<T = void>(
   }
 
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || '';
-    return fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}${endpoint}`, config)
-    .then(async (response) => {
-      // Handle token refresh if 401 and we have a refresh token
-      if (response.status === 401 && tokens?.refreshToken) {
-        try {
-          const newTokens = await refreshAuthToken(tokens.refreshToken);
-          if (newTokens) {
-            // Update the Authorization header with the new token
-            config.headers = {
-              ...config.headers,
-              'Authorization': `Bearer ${newTokens.accessToken}`
-            };
-            // Retry the original request
-            return fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}${endpoint}`, config)
-              .then(handleResponse<T>);
+    return fetch(`${API_URL}${endpoint}`, config)
+      .then(async (response) => {
+        // Handle token refresh if 401 and we have a refresh token
+        if (response.status === 401 && tokens?.refreshToken) {
+          try {
+            const newTokens = await refreshAuthToken(tokens.refreshToken);
+            if (newTokens) {
+              // Update the Authorization header with the new token
+              config.headers = {
+                ...config.headers,
+                Authorization: `Bearer ${newTokens.accessToken}`,
+              };
+              // Retry the original request
+              return fetch(`${API_URL}${endpoint}`, config).then(handleResponse<T>);
+            }
+          } catch {
+            // If refresh fails, clear tokens and redirect to login
+            clearTokens();
+            if (typeof window !== 'undefined') {
+              window.location.href = '/auth/login';
+            }
+            throw new Error('Session expired. Please log in again.');
           }
-        } catch (refreshError) {
-          // If refresh fails, clear tokens and redirect to login
-          clearTokens();
-          if (typeof window !== 'undefined') {
-            window.location.href = '/auth/login';
-          }
-          throw new Error('Session expired. Please log in again.');
         }
-      }
-      return handleResponse<T>(response);
-    })
-    .catch((error) => {
-      if (error instanceof ApiError) {
-        // Handle specific error statuses
-        if (error.status === 401) {
-          // Clear tokens and redirect to login
-          clearTokens();
-          if (typeof window !== 'undefined') {
-            window.location.href = '/auth/login';
+        return handleResponse<T>(response);
+      })
+      .catch((error) => {
+        if (error instanceof ApiError) {
+          // Handle specific error statuses
+          if (error.status === 401) {
+            // Clear tokens and redirect to login
+            clearTokens();
+            if (typeof window !== 'undefined') {
+              window.location.href = '/auth/login';
+            }
+          } else if (error.status >= 500) {
+            toast.error('Server error. Please try again later.');
+          } else {
+            toast.error(error.message || 'An error occurred');
           }
-        } else if (error.status >= 500) {
-          toast.error('Server error. Please try again later.');
         } else {
-          toast.error(error.message || 'An error occurred');
+          toast.error('Network error. Please check your connection.');
         }
-      } else {
-        toast.error('Network error. Please check your connection.');
-      }
-      throw error;
-    });
+        throw error;
+      });
   } catch (error) {
     if (error instanceof ApiError) {
       // Show error toast for client-side errors (400-499)
@@ -166,7 +164,7 @@ export async function apiRequest<T = void>(
 // Auth token refresh function
 async function refreshAuthToken(refreshToken: string): Promise<AuthTokens | null> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/auth/refresh`, {
+    const response = await fetch(`${API_URL}/auth/refresh`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -181,11 +179,14 @@ async function refreshAuthToken(refreshToken: string): Promise<AuthTokens | null
     const tokens = await response.json();
     setTokens(tokens);
     return tokens;
-  } catch (error) {
+  } catch {
     clearTokens();
     return null;
   }
 }
+
+// Export token helpers for use in AuthContext and other modules
+export { getTokens, setTokens, clearTokens };
 
 // Example API methods
 export const api = {

@@ -32,7 +32,7 @@ export default function ResetPasswordPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (password !== confirmPassword) {
       toast.error('Passwords do not match');
       return;
@@ -45,11 +45,11 @@ export default function ResetPasswordPage() {
 
     try {
       setIsLoading(true);
-      await api.post('/auth/reset-password', { 
-        token, 
-        newPassword: password 
+      await api.post('/auth/reset-password', {
+        token,
+        newPassword: password,
       });
-      
+
       toast.success('Your password has been reset successfully');
       router.push('/auth/login');
     } catch (error) {
@@ -65,7 +65,9 @@ export default function ResetPasswordPage() {
         <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-md">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900">Verifying token...</h2>
-            <p className="mt-2 text-sm text-gray-600">Please wait while we verify your reset token.</p>
+            <p className="mt-2 text-sm text-gray-600">
+              Please wait while we verify your reset token.
+            </p>
           </div>
         </div>
       </div>
@@ -101,9 +103,7 @@ export default function ResetPasswordPage() {
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Reset your password
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Enter your new password below.
-        </p>
+        <p className="mt-2 text-center text-sm text-gray-600">Enter your new password below.</p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -123,9 +123,7 @@ export default function ResetPasswordPage() {
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
               </div>
-              <p className="mt-1 text-xs text-gray-500">
-                Must be at least 8 characters long
-              </p>
+              <p className="mt-1 text-xs text-gray-500">Must be at least 8 characters long</p>
             </div>
 
             <div>

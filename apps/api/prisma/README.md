@@ -5,11 +5,13 @@ This directory contains all database-related configurations, migrations, and uti
 ## Prisma Setup
 
 ### Prerequisites
+
 - Node.js 16+
 - PostgreSQL 13+
 - pnpm
 
 ### Environment Variables
+
 Create a `.env` file in the `apps/api` directory with the following variables:
 
 ```env
@@ -24,18 +26,19 @@ DATABASE_URL="postgresql://user:password@localhost:5432/titan_pomade?schema=publ
 
 ### Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `pnpm db:generate` | Generate Prisma Client |
-| `pnpm db:migrate` | Run database migrations in development |
-| `pnpm db:migrate:deploy` | Apply migrations in production |
-| `pnpm db:seed` | Seed the database with test data |
-| `pnpm db:setup` | Setup database (generate + migrate + seed) |
-| `pnpm db:studio` | Open Prisma Studio for database management |
+| Command                  | Description                                |
+| ------------------------ | ------------------------------------------ |
+| `pnpm db:generate`       | Generate Prisma Client                     |
+| `pnpm db:migrate`        | Run database migrations in development     |
+| `pnpm db:migrate:deploy` | Apply migrations in production             |
+| `pnpm db:seed`           | Seed the database with test data           |
+| `pnpm db:setup`          | Setup database (generate + migrate + seed) |
+| `pnpm db:studio`         | Open Prisma Studio for database management |
 
 ### Running Migrations
 
 1. **Create a new migration** (after schema changes):
+
    ```bash
    pnpm db:migrate --name migration_name
    ```
@@ -74,6 +77,7 @@ The seed script (`seed.ts`) creates the following test users:
 #### Idempotent Operation
 
 The seed script is idempotent, meaning it can be safely run multiple times. It uses `upsert` operations to:
+
 - Create users if they don't exist
 - Update existing users if their data has changed
 - Leave users unchanged if they already match the expected state
@@ -100,6 +104,7 @@ pnpm db:seed
 ### Models
 
 #### User
+
 - `id`: String (UUID)
 - `email`: String (unique)
 - `password`: String (hashed)
@@ -131,7 +136,9 @@ pnpm db:seed
 ## Database Access
 
 ### Prisma Studio
+
 For visual database management:
+
 ```bash
 pnpm db:studio
 ```
@@ -139,11 +146,13 @@ pnpm db:studio
 ## Troubleshooting
 
 ### Connection Issues
+
 - Verify `DATABASE_URL` is correctly set
 - Ensure PostgreSQL is running
 - Check database credentials
 
 ### Migration Issues
+
 - If migrations fail, check the error message and review the migration files
 - You may need to reset the database in development:
   ```bash

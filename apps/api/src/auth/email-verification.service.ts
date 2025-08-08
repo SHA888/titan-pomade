@@ -56,8 +56,8 @@ export class EmailVerificationService {
     await this.prisma.emailVerificationToken.create({
       data: {
         token: hashedToken,
-        userId,
         expiresAt,
+        user: { connect: { id: userId } },
       } as Prisma.EmailVerificationTokenCreateInput,
     });
 

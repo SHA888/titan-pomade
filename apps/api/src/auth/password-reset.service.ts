@@ -9,7 +9,7 @@ export class PasswordResetService {
 
   constructor(private prisma: PrismaService) {}
 
-  async createPasswordResetToken(email: string): Promise<string> {
+  async createPasswordResetToken(email: string): Promise<string | null> {
     // Find user by email
     const user = await this.prisma.user.findUnique({
       where: { email },
@@ -17,7 +17,7 @@ export class PasswordResetService {
 
     if (!user) {
       // For security reasons, we don't reveal if the email exists or not
-      return;
+      return null;
     }
 
     // Generate a secure random token

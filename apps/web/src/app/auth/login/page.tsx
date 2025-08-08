@@ -20,7 +20,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email || !password) {
       toast.error('Please fill in all fields');
       return;
@@ -45,10 +45,7 @@ export default function LoginPage() {
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
           Or{' '}
-          <Link
-            href="/auth/register"
-            className="font-medium text-indigo-600 hover:text-indigo-500"
-          >
+          <Link href="/auth/register" className="font-medium text-indigo-600 hover:text-indigo-500">
             create a new account
           </Link>
         </p>
