@@ -31,7 +31,9 @@ export class JwtStrategy extends PassportStrategy(Strategy, JWT_STRATEGY) {
       throw new UnauthorizedException('Invalid token payload');
     }
 
+    // Include `sub` to match controller expectations, keep `userId` for compatibility
     return {
+      sub: payload.sub,
       userId: payload.sub,
       email: payload.email,
       role: payload.role,

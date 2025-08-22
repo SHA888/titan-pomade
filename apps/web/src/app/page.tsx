@@ -1,4 +1,5 @@
 import { MainLayout } from '@/components/layout/main-layout';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -13,18 +14,18 @@ export default function Home() {
             Tailwind CSS.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <a
+            <Link
               href="/dashboard"
               className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               Get Started
-            </a>
-            <a
+            </Link>
+            <Link
               href="/docs"
               className="inline-flex items-center justify-center rounded-md border border-input bg-background px-6 py-3 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               Documentation
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,8 +1,10 @@
+import { Role } from '@prisma/client';
+
 export interface User {
   id: string;
   email: string;
   name: string;
-  role: string;
+  role: Role;
   isEmailVerified: boolean;
   createdAt: string;
   updatedAt: string;

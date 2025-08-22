@@ -16,7 +16,8 @@ export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get('redirect') || '/';
+  // Prefer 'next' (set by middleware), fallback to 'redirect'. If none, allow login() to decide.
+  const redirectTo = searchParams.get('next') || searchParams.get('redirect') || '';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,8 +30,10 @@ export default function LoginPage() {
     try {
       setIsLoading(true);
       await login(email, password);
-      router.push(redirectTo);
-    } catch (error) {
+      if (redirectTo) {
+        router.push(redirectTo);
+      }
+    } catch {
       // Error is already handled in the login function
     } finally {
       setIsLoading(false);

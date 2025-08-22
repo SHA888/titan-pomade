@@ -3,11 +3,23 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { api, setTokens, clearTokens } from '@/lib/api';
+import { api, setTokens, clearTokens, getTokens } from '@/lib/api';
 import { getErrorMessage } from '@/lib/error-utils';
 import { User, AuthContextType, AuthTokens } from './types';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Simple cookie helpers for client-side cookie management
+const setCookie = (name: string, value: string, days = 7) => {
+  if (typeof document === 'undefined') return;
+  const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
+  document.cookie = `${name}=${encodeURIComponent(value)}; Path=/; Expires=${expires}; SameSite=Lax`;
+};
+
+const deleteCookie = (name: string) => {
+  if (typeof document === 'undefined') return;
+  document.cookie = `${name}=; Path=/; Max-Age=0; SameSite=Lax`;
+};
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -16,19 +28,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Check if user is authenticated on initial load
   useEffect(() => {
+    let aborted = false;
     const checkAuth = async () => {
       try {
+        // Only attempt to fetch if we have an access token
+        const tokens = getTokens();
+        if (!tokens?.accessToken) {
+          if (!aborted) setIsLoading(false);
+          return;
+        }
+
         const userData = await api.get<User>('/auth/me');
         setUser(userData);
+        // Mirror role into a simple cookie for middleware-based gating
+        setCookie('role', userData.role);
       } catch (err) {
         console.error('Auth check failed:', err);
         setUser(null);
+        deleteCookie('role');
       } finally {
-        setIsLoading(false);
+        if (!aborted) setIsLoading(false);
       }
     };
 
     checkAuth();
+    return () => {
+      aborted = true;
+    };
   }, []);
 
   const login = async (email: string, password: string): Promise<void> => {
@@ -41,6 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Get user data after successful login
       const userData = await api.get<User>('/auth/me');
       setUser(userData);
+      setCookie('role', userData.role);
 
       // Check if email is verified
       if (!userData.isEmailVerified) {
@@ -50,7 +77,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       toast.success('Logged in successfully');
-      router.push('/dashboard');
+      // Redirect based on role
+      if (userData.role === 'ADMIN') {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/dashboard');
+      }
     } catch (error: unknown) {
       const message = getErrorMessage(error) || 'Invalid email or password';
       toast.error(message);
@@ -81,6 +113,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Clear stored tokens and reset user state
     clearTokens();
     setUser(null);
+    deleteCookie('role');
     router.push('/auth/login');
   };
 

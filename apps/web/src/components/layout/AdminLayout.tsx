@@ -11,7 +11,7 @@ interface AdminLayoutProps {
 }
 
 export function AdminLayout({ children }: AdminLayoutProps) {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const router = useRouter();
 
   // Redirect to login if not authenticated
@@ -36,28 +36,36 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <aside className="w-64 bg-white shadow-md">
+    <div className="flex min-h-screen bg-background text-foreground">
+      <aside className="w-64 bg-card shadow-md border-r border-border flex flex-col">
         <div className="p-4">
           <h1 className="text-xl font-bold">Admin Panel</h1>
         </div>
-        <nav className="mt-4">
+        <nav className="mt-2">
           <ul>
             <li>
               <a
                 href="/admin/dashboard"
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                className="block px-4 py-2 text-foreground/80 hover:bg-accent hover:text-foreground"
               >
                 Dashboard
               </a>
             </li>
             <li>
-              <a href="/admin/users" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+              <a
+                href="/admin/users"
+                className="block px-4 py-2 text-foreground/80 hover:bg-accent hover:text-foreground"
+              >
                 Users
               </a>
             </li>
           </ul>
         </nav>
+        <div className="mt-auto p-4 border-t border-border">
+          <Button variant="destructive" className="w-full" onClick={logout}>
+            Logout
+          </Button>
+        </div>
       </aside>
       <main className="flex-1 p-8">{children}</main>
     </div>

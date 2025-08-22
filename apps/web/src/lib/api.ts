@@ -130,11 +130,18 @@ export async function apiRequest<T = void>(
         if (error instanceof ApiError) {
           // Handle specific error statuses
           if (error.status === 401) {
-            // Clear tokens and redirect to login
-            clearTokens();
-            if (typeof window !== 'undefined') {
-              window.location.href = '/auth/login';
+            // Only redirect if we actually had a session
+            if (tokens?.accessToken || tokens?.refreshToken) {
+              clearTokens();
+              if (typeof window !== 'undefined') {
+                window.location.href = '/auth/login';
+              }
             }
+            // For guests, just propagate without noisy toast
+            return Promise.reject(error);
+          } else if (error.status === 429) {
+            // Too Many Requests — surface a mild toast
+            toast.error('You are making requests too quickly. Please wait a moment.');
           } else if (error.status >= 500) {
             toast.error('Server error. Please try again later.');
           } else {

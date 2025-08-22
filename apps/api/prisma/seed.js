@@ -29,24 +29,30 @@ async function seed() {
 
     const admin = await prisma.user.upsert({
       where: { email: 'admin@example.com' },
-      update: {},
+      update: {
+        isEmailVerified: true,
+      },
       create: {
         email: 'admin@example.com',
         name: 'Admin User',
         password: adminPassword,
         role: 'ADMIN',
+        isEmailVerified: true,
       },
     });
     users.push(admin);
 
     const user = await prisma.user.upsert({
       where: { email: 'user@example.com' },
-      update: {},
+      update: {
+        isEmailVerified: true,
+      },
       create: {
         email: 'user@example.com',
         name: 'Regular User',
         password: userPassword,
         role: 'USER',
+        isEmailVerified: true,
       },
     });
     users.push(user);

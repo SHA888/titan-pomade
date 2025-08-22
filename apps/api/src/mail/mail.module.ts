@@ -5,17 +5,21 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { join } from 'path';
 import { MailService } from './mail.service';
 import type { MailerOptions } from '@nestjs-modules/mailer/dist/interfaces/mailer-options.interface';
-import type { Options as SMTPOptions } from 'nodemailer/lib/smtp-transport';
+import type { TransportOptions } from 'nodemailer';
+import mailConfig from './mail.config';
 
 @Module({
   imports: [
+    ConfigModule.forFeature(mailConfig),
     NestMailerModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService): MailerOptions => {
+        const isProd =
+          configService.get<string>('app.nodeEnv') === 'production';
         // Get configuration values with proper type assertions
         const getConfig = <T>(
           key: string,
-          isRequired = true,
+          isRequired = isProd,
         ): T | undefined => {
           const value = configService.get<T>(key);
           if (isRequired && (value === undefined || value === null)) {
@@ -33,26 +37,28 @@ import type { Options as SMTPOptions } from 'nodemailer/lib/smtp-transport';
 
         const mailFrom = getConfig<{ name?: string; email?: string }>(
           'mail.from',
-        );
+          isProd,
+        ) || { name: 'Titan Pomade', email: 'noreply@example.com' };
 
-        if (!mailFrom?.name || !mailFrom?.email) {
-          throw new Error('Missing required mail.from configuration');
-        }
+        const fromName = mailFrom.name ?? 'Titan Pomade';
+        const fromEmail = mailFrom.email ?? 'noreply@example.com';
 
-        const { name: fromName, email: fromEmail } = mailFrom;
-
-        const transport: SMTPOptions = {
-          host,
-          port,
-          secure,
-          auth: {
-            user,
-            pass: password,
-          },
-        };
+        // If not in production and mail config is missing, use a JSON transport fallback
+        const hasSmtpConfig = !!host && !!port && !!user && !!password;
+        const transport: string | TransportOptions = hasSmtpConfig
+          ? {
+              host,
+              port,
+              secure,
+              auth: {
+                user,
+                pass: password,
+              },
+            }
+          : ({ jsonTransport: true } as TransportOptions);
 
         return {
-          transport: transport,
+          transport,
           defaults: {
             from: `"${fromName}" <${fromEmail}>`,
           },

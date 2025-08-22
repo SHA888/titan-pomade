@@ -11,6 +11,7 @@ import { RefreshTokenGuard } from './guards/refresh-token.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { PermissionsGuard } from './guards/permissions.guard';
 import { PrismaModule } from '../prisma/prisma.module';
+import { JWT_CONFIG } from './constants/auth.constants';
 import { PasswordResetService } from './password-reset.service';
 import { EmailVerificationService } from './email-verification.service';
 import { MailModule } from '../mail/mail.module';
@@ -19,6 +20,7 @@ import { MailModule } from '../mail/mail.module';
   imports: [
     PrismaModule,
     MailModule,
+    ConfigModule.forFeature(JWT_CONFIG),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -26,7 +28,10 @@ import { MailModule } from '../mail/mail.module';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('jwt.secret'),
         signOptions: {
-          expiresIn: configService.get<string>('jwt.expiresIn', '15m'),
+          expiresIn: configService.get<string>(
+            'jwt.accessTokenExpiresIn',
+            '15m',
+          ),
         },
       }),
     }),
