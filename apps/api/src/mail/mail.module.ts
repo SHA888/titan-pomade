@@ -5,7 +5,6 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { join } from 'path';
 import { MailService } from './mail.service';
 import type { MailerOptions } from '@nestjs-modules/mailer/dist/interfaces/mailer-options.interface';
-import type { TransportOptions } from 'nodemailer';
 import mailConfig from './mail.config';
 
 @Module({
@@ -45,17 +44,15 @@ import mailConfig from './mail.config';
 
         // If not in production and mail config is missing, use a JSON transport fallback
         const hasSmtpConfig = !!host && !!port && !!user && !!password;
-        const transport: string | TransportOptions = hasSmtpConfig
-          ? {
-              host,
-              port,
-              secure,
-              auth: {
-                user,
-                pass: password,
-              },
-            }
-          : ({ jsonTransport: true } as TransportOptions);
+        let transport: MailerOptions['transport'];
+        if (hasSmtpConfig && host && port && user && password) {
+          const smtpUri = `${secure ? 'smtps' : 'smtp'}://${encodeURIComponent(
+            user,
+          )}:${encodeURIComponent(password)}@${host}:${port}`;
+          transport = smtpUri;
+        } else {
+          transport = { jsonTransport: true };
+        }
 
         return {
           transport,
