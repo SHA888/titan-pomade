@@ -46,8 +46,8 @@ export class SearchSyncService implements OnModuleInit {
                 typeof params.args === 'object' &&
                 'where' in (params.args as Record<string, unknown>)
               ) {
-                const where =
-                  (params.args as { where?: { id?: string } }).where;
+                const where = (params.args as { where?: { id?: string } })
+                  .where;
                 id = where?.id;
               }
               if (
