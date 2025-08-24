@@ -8,8 +8,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: titan_pomade_dev
-    ports:
-      - "5432:5432"
+    # no host port mapping to avoid conflicts; reachable as "postgres:5432" from other services
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -36,8 +35,7 @@ services:
   # Redis
   redis:
     image: redis:7-alpine
-    ports:
-      - "6379:6379"
+    # no host port mapping to avoid conflicts; reachable as "redis:6379" from other services
     volumes:
       - redis_data:/data
     healthcheck:
@@ -51,8 +49,7 @@ services:
     build:
       context: ../..
       dockerfile: docker/dev/Dockerfile
-      target: development
-    command: pnpm --filter @titan-pomade/api dev
+    command: sh -lc 'pnpm --filter @titan-pomade/api db:generate && pnpm --filter @titan-pomade/api start:dev'
     volumes:
       - ../../:/app
     ports:
@@ -74,7 +71,6 @@ services:
     build:
       context: ../..
       dockerfile: docker/dev/Dockerfile
-      target: development
     command: pnpm --filter @titan-pomade/web dev
     volumes:
       - ../../:/app

@@ -13,9 +13,16 @@ import { CoreModule } from './core/core.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
-  imports: [CoreModule.forRoot(), PrismaModule, AuthModule, AdminModule],
+  imports: [
+    CoreModule.forRoot(),
+    PrismaModule,
+    AuthModule,
+    AdminModule,
+    SearchModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
