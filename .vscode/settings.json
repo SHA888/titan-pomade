@@ -1,0 +1,36 @@
+{
+  \"typescript.preferences.includePackageJsonAutoImports\": \"auto\",
+  \"typescript.suggest.autoImports\": true,
+  \"editor.codeActionsOnSave\": {
+    \"source.fixAll.eslint\": \"explicit\",
+    \"source.organizeImports\": \"explicit\"
+  },
+  \"editor.formatOnSave\": true,
+  \"editor.defaultFormatter\": \"esbenp.prettier-vscode\",
+  \"eslint.workingDirectories\": [
+    \"apps/api\",
+    \"apps/web\"
+  ],
+  \"files.exclude\": {
+    \"**/node_modules\": true,
+    \"**/dist\": true,
+    \"**/.next\": true,
+    \"**/coverage\": true
+  },
+  \"search.exclude\": {
+    \"**/node_modules\": true,
+    \"**/dist\": true,
+    \"**/.next\": true,
+    \"**/coverage\": true,
+    \"pnpm-lock.yaml\": true
+  },
+  \"emmet.includeLanguages\": {
+    \"typescript\": \"html\",
+    \"typescriptreact\": \"html\"
+  },
+  \"tailwindCSS.includeLanguages\": {
+    \"typescript\": \"html\",
+    \"typescriptreact\": \"html\"
+  },
+  \"prisma.showPrismaDataPlatformNotification\": false
+}"

@@ -1,41 +1,51 @@
-version: '3.8'
-
 services:
   # Database
   postgres:
     image: postgres:16-alpine
+    container_name: titan-pomade-postgres-dev
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: titan_pomade_dev
-    # no host port mapping to avoid conflicts; reachable as "postgres:5432" from other services
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    ports:
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - titan-dev
 
   # MeiliSearch
   meilisearch:
     image: getmeili/meilisearch:v1.5
+    container_name: titan-pomade-meilisearch-dev
     ports:
       - "7700:7700"
     environment:
       MEILI_MASTER_KEY: masterKey
+      MEILI_ENV: development
     volumes:
       - meili_data:/meili_data
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--spider",  "--tries=1", "http://localhost:7700/health"]
+      test: ["CMD", "wget", "--no-verbose", "--spider", "--tries=1", "http://localhost:7700/health"]
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - titan-dev
 
   # Redis
   redis:
     image: redis:7-alpine
-    # no host port mapping to avoid conflicts; reachable as "redis:6379" from other services
+    container_name: titan-pomade-redis-dev
+    ports:
+      - "6379:6379"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -43,46 +53,85 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
+    networks:
+      - titan-dev
 
   # API Service
   api:
     build:
       context: ../..
       dockerfile: docker/dev/Dockerfile
-    command: sh -lc 'pnpm --filter @titan-pomade/api db:generate && pnpm --filter @titan-pomade/api start:dev'
+    container_name: titan-pomade-api-dev
+    command: sh -c 'pnpm --filter @titan-pomade/api db:generate && pnpm --filter @titan-pomade/api start:dev'
     volumes:
       - ../../:/app
+      - /app/node_modules
+      - api_node_modules:/app/apps/api/node_modules
     ports:
       - "5000:5000"
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/titan_pomade_dev
+      - REDIS_URL=redis://redis:6379
+      - MEILISEARCH_HOST=http://meilisearch:7700
+      - MEILISEARCH_API_KEY=masterKey
+      - JWT_SECRET=dev-jwt-secret-key
+      - LOG_LEVEL=debug
+      - LOG_PRETTY_PRINT=true
+      - CORS_ORIGIN=http://localhost:3000,http://web:3000
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
-    environment:
-      - NODE_ENV=development
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/titan_pomade_dev
-      - REDIS_URL=redis://redis:6379
-      - MEILISEARCH_HOST=http://meilisearch:7700
-      - MEILISEARCH_API_KEY=masterKey
+      meilisearch:
+        condition: service_healthy
+    networks:
+      - titan-dev
+    restart: unless-stopped
 
   # Web Service
   web:
     build:
       context: ../..
       dockerfile: docker/dev/Dockerfile
+    container_name: titan-pomade-web-dev
     command: pnpm --filter @titan-pomade/web dev
     volumes:
       - ../../:/app
+      - /app/node_modules
+      - web_node_modules:/app/apps/web/node_modules
+      - web_next:/app/apps/web/.next
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://api:5000
+      - NEXT_PUBLIC_API_URL=http://localhost:5000
+      - NEXT_PUBLIC_APP_URL=http://localhost:3000
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
     depends_on:
       - api
+    networks:
+      - titan-dev
+    restart: unless-stopped
+
+networks:
+  titan-dev:
+    driver: bridge
+    name: titan-pomade-dev
 
 volumes:
   postgres_data:
+    name: titan-pomade-postgres-dev
   redis_data:
+    name: titan-pomade-redis-dev
   meili_data:
+    name: titan-pomade-meilisearch-dev
+  api_node_modules:
+    name: titan-pomade-api-node-modules-dev
+  web_node_modules:
+    name: titan-pomade-web-node-modules-dev
+  web_next:
+    name: titan-pomade-web-next-dev

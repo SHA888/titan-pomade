@@ -1,0 +1,61 @@
+{
+  \"folders\": [
+    {
+      \"name\": \"🏠 Root\",
+      \"path\": \".\"
+    },
+    {
+      \"name\": \"🚀 API\",
+      \"path\": \"./apps/api\"
+    },
+    {
+      \"name\": \"🌐 Web\",
+      \"path\": \"./apps/web\"
+    },
+    {
+      \"name\": \"📦 Shared\",
+      \"path\": \"./packages/shared\"
+    }
+  ],
+  \"settings\": {
+    \"typescript.preferences.includePackageJsonAutoImports\": \"auto\",
+    \"typescript.suggest.autoImports\": true,
+    \"editor.codeActionsOnSave\": {
+      \"source.fixAll.eslint\": true,
+      \"source.organizeImports\": true
+    },
+    \"editor.formatOnSave\": true,
+    \"editor.defaultFormatter\": \"esbenp.prettier-vscode\",
+    \"eslint.workingDirectories\": [
+      \"apps/api\",
+      \"apps/web\"
+    ],
+    \"files.exclude\": {
+      \"**/node_modules\": true,
+      \"**/dist\": true,
+      \"**/.next\": true,
+      \"**/coverage\": true
+    },
+    \"search.exclude\": {
+      \"**/node_modules\": true,
+      \"**/dist\": true,
+      \"**/.next\": true,
+      \"**/coverage\": true,
+      \"pnpm-lock.yaml\": true
+    }
+  },
+  \"extensions\": {
+    \"recommendations\": [
+      \"esbenp.prettier-vscode\",
+      \"dbaeumer.vscode-eslint\",
+      \"bradlc.vscode-tailwindcss\",
+      \"prisma.prisma\",
+      \"ms-vscode.vscode-typescript-next\",
+      \"ms-vscode-remote.remote-containers\",
+      \"ms-azuretools.vscode-docker\",
+      \"formulahendry.auto-rename-tag\",
+      \"christian-kohler.path-intellisense\",
+      \"ms-vscode.vscode-json\"
+    ]
+  }
+}

@@ -1,128 +1,140 @@
 # =============================================================================
-# TITAN POMADE - ENVIRONMENT VARIABLES EXAMPLE
+# Docker Ignore File for Titan Pomade
 # =============================================================================
-# Copy this file to .env and update the values for your local development
+# Prevent unnecessary files from being copied to Docker build context
 
 # =============================================================================
-# APPLICATION SETTINGS
+# Version Control
 # =============================================================================
-NODE_ENV=development
+.git
+.gitignore
+.gitattributes
+.github
 
 # =============================================================================
-# API CONFIGURATION
+# Documentation
 # =============================================================================
-PORT=5000
-API_PREFIX=api
-API_VERSION=1
+*.md
+docs/
+README.md
+CHANGELOG.md
+CONTRIBUTING.md
+LICENSE
 
 # =============================================================================
-# DATABASE CONFIGURATION
+# Dependencies (will be installed in container)
 # =============================================================================
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/titan_pomade_dev
-
-# PostgreSQL Database Settings (for Docker)
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
-POSTGRES_DB=titan_pomade_dev
-POSTGRES_PORT=5432
-
-# =============================================================================
-# REDIS CONFIGURATION
-# =============================================================================
-REDIS_URL=redis://localhost:6379
-REDIS_PORT=6379
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store
 
 # =============================================================================
-# MEILISEARCH CONFIGURATION
+# Build Outputs
 # =============================================================================
-MEILISEARCH_HOST=http://localhost:7700
-MEILISEARCH_API_KEY=masterKey
-MEILISEARCH_PORT=7700
-MEILISEARCH_MASTER_KEY=masterKey
+dist/
+build/
+.next/
+out/
+coverage/
 
 # =============================================================================
-# AUTHENTICATION & SECURITY
+# Environment & Configuration
 # =============================================================================
-JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-JWT_EXPIRATION=1d
-JWT_REFRESH_SECRET=your-super-secret-refresh-key-change-this-in-production
-JWT_REFRESH_EXPIRATION=7d
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.production
 
 # =============================================================================
-# CORS CONFIGURATION
+# IDE & Editor Files
 # =============================================================================
-CORS_ORIGIN=http://localhost:3000,http://localhost:3001
-CORS_METHODS=GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
 # =============================================================================
-# RATE LIMITING & THROTTLING
+# OS Generated Files
 # =============================================================================
-THROTTLE_TTL=60
-THROTTLE_LIMIT=100
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
 # =============================================================================
-# LOGGING CONFIGURATION
+# Logs
 # =============================================================================
-LOG_LEVEL=debug
-LOG_PRETTY_PRINT=true
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
 # =============================================================================
-# EMAIL CONFIGURATION
+# Testing
 # =============================================================================
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USER=your-email@gmail.com
-MAIL_PASS=your-app-password
-MAIL_FROM=noreply@titan-pomade.com
+coverage/
+.nyc_output
+.jest-cache
 
 # =============================================================================
-# FRONTEND CONFIGURATION (Next.js)
+# Temporary Files
 # =============================================================================
-NEXT_PUBLIC_API_URL=http://localhost:5000
-NEXT_PUBLIC_APP_URL=http://localhost:3000
+tmp/
+temp/
+*.tmp
+*.temp
 
 # =============================================================================
-# SECURITY SETTINGS
+# Docker Files (prevent recursion)
 # =============================================================================
-HELMET_ENABLED=true
-RATE_LIMIT_ENABLED=true
+Dockerfile*
+docker-compose*.yml
+.dockerignore
 
 # =============================================================================
-# FEATURE FLAGS
+# Development Scripts
 # =============================================================================
-NEXT_PUBLIC_FEATURE_SEARCH=true
-NEXT_PUBLIC_FEATURE_ANALYTICS=false
+dev.sh
 
 # =============================================================================
-# ANALYTICS (Optional)
+# Database
 # =============================================================================
-NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+*.sqlite
+*.sqlite3
 
 # =============================================================================
-# AUTH0 CONFIGURATION (Optional)
+# Prisma
 # =============================================================================
-NEXT_PUBLIC_AUTH0_DOMAIN=your-domain.auth0.com
-NEXT_PUBLIC_AUTH0_CLIENT_ID=your-client-id
-NEXT_PUBLIC_AUTH0_AUDIENCE=your-api-audience
+# Keep schema and migrations, exclude generated client
+apps/api/generated/
+apps/api/prisma/dev.db*
 
 # =============================================================================
-# DEVELOPMENT SETTINGS
+# Next.js
 # =============================================================================
-# Default passwords for seeding (development only)
-ADMIN_PASSWORD=admin123
-USER_PASSWORD=user123
+.next/
+out/
 
 # =============================================================================
-# HEALTH CHECK
+# TypeScript
 # =============================================================================
-HEALTH_CHECK_URL=/health
+*.tsbuildinfo
 
 # =============================================================================
-# DOCKER SETTINGS
+# Package Manager Lock Files (will be copied explicitly when needed)
 # =============================================================================
-# Ports for Docker services
-APP_PORT=3000
-API_PORT=5000
-DB_PORT=5432
-REDIS_PORT_EXTERNAL=6379
-MEILISEARCH_PORT_EXTERNAL=7700
+# We explicitly copy these in Dockerfile, so exclude from general context
+# package-lock.json
+# yarn.lock
+# Note: pnpm-lock.yaml is needed and will be copied explicitly

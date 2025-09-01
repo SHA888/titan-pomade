@@ -1,0 +1,21 @@
+{
+  \"recommendations\": [
+    \"esbenp.prettier-vscode\",
+    \"dbaeumer.vscode-eslint\",
+    \"bradlc.vscode-tailwindcss\",
+    \"prisma.prisma\",
+    \"ms-vscode.vscode-typescript-next\",
+    \"ms-vscode-remote.remote-containers\",
+    \"ms-azuretools.vscode-docker\",
+    \"formulahendry.auto-rename-tag\",
+    \"christian-kohler.path-intellisense\",
+    \"ms-vscode.vscode-json\",
+    \"bradlc.vscode-tailwindcss\",
+    \"ms-vscode.vscode-eslint\",
+    \"yzhang.markdown-all-in-one\",
+    \"github.copilot\"
+  ],
+  \"unwantedRecommendations\": [
+    \"ms-vscode.vscode-typescript\"
+  ]
+}"

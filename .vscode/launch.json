@@ -1,0 +1,68 @@
+{
+  \"version\": \"0.2.0\",
+  \"configurations\": [
+    {
+      \"name\": \"🚀 Debug API (Docker)\",
+      \"type\": \"node\",
+      \"request\": \"attach\",
+      \"port\": 9229,
+      \"restart\": true,
+      \"localRoot\": \"${workspaceFolder}/apps/api\",
+      \"remoteRoot\": \"/app/apps/api\",
+      \"skipFiles\": [\"<node_internals>/**\"],
+      \"outFiles\": [\"${workspaceFolder}/apps/api/dist/**/*.js\"]
+    },
+    {
+      \"name\": \"🌐 Debug Web (Docker)\",
+      \"type\": \"node\",
+      \"request\": \"attach\",
+      \"port\": 9230,
+      \"restart\": true,
+      \"localRoot\": \"${workspaceFolder}/apps/web\",
+      \"remoteRoot\": \"/app/apps/web\",
+      \"skipFiles\": [\"<node_internals>/**\"]
+    },
+    {
+      \"name\": \"🧪 Debug API Tests\",
+      \"type\": \"node\",
+      \"request\": \"launch\",
+      \"program\": \"${workspaceFolder}/node_modules/.bin/jest\",
+      \"args\": [
+        \"--config\",
+        \"${workspaceFolder}/apps/api/jest.config.ts\",
+        \"--runInBand\",
+        \"--no-cache\"
+      ],
+      \"cwd\": \"${workspaceFolder}/apps/api\",
+      \"console\": \"integratedTerminal\",
+      \"internalConsoleOptions\": \"neverOpen\",
+      \"env\": {
+        \"NODE_ENV\": \"test\"
+      }
+    },
+    {
+      \"name\": \"🧪 Debug Web Tests\",
+      \"type\": \"node\",
+      \"request\": \"launch\",
+      \"program\": \"${workspaceFolder}/node_modules/.bin/jest\",
+      \"args\": [
+        \"--config\",
+        \"${workspaceFolder}/apps/web/jest.config.js\",
+        \"--runInBand\",
+        \"--no-cache\"
+      ],
+      \"cwd\": \"${workspaceFolder}/apps/web\",
+      \"console\": \"integratedTerminal\",
+      \"internalConsoleOptions\": \"neverOpen\",
+      \"env\": {
+        \"NODE_ENV\": \"test\"
+      }
+    }
+  ],
+  \"compounds\": [
+    {
+      \"name\": \"🔄 Debug Full Stack\",
+      \"configurations\": [\"🚀 Debug API (Docker)\", \"🌐 Debug Web (Docker)\"]
+    }
+  ]
+}"

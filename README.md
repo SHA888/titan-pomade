@@ -58,16 +58,50 @@ A modern, full-stack web application template built with cutting-edge technologi
 
 - [Node.js](https://nodejs.org/) 18+
 - [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
-- [PostgreSQL](https://www.postgresql.org/download/) 16
 - [pnpm](https://pnpm.io/) (required package manager)
+
+### Development Options
+
+Choose your preferred development setup:
+
+1. **🐳 Docker Development** (Recommended)
+2. **⚡ Local Development** (Advanced)
+
+### 🐳 Docker Development (Recommended)
+
+The fastest way to get started with a fully containerized development environment:
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/titan-pomade.git
+cd titan-pomade
+
+# Quick setup and start
+./dev.sh setup
+./dev.sh start
+
+# Access your application:
+# - Frontend: http://localhost:3000
+# - API: http://localhost:5000
+# - API Docs: http://localhost:5000/api/docs
+# - MeiliSearch: http://localhost:7700
+```
+
+**📚 For detailed Docker development guide, see [docs/DOCKER_DEVELOPMENT.md](docs/DOCKER_DEVELOPMENT.md)**
+
+### ⚡ Local Development (Advanced)
+
+For developers who prefer running services locally:
 
 ### Ports
 
 - **Frontend**: `3000` (http://localhost:3000)
 - **Backend API**: `5000` (http://localhost:5000)
 - **Database**: `5432`
+- **Redis**: `6379`
+- **MeiliSearch**: `7700`
 
-### Quick Start (For Experienced Developers)
+### Quick Start (Local Development)
 
 ```bash
 # Clone the repository
@@ -79,12 +113,17 @@ pnpm install
 
 # Copy and configure environment variables
 cp .env.example .env
+cp apps/api/.env.example apps/api/.env
+cp apps/web/.env.example apps/web/.env.local
 
-# Start services
-docker-compose up -d
+# Start external services (PostgreSQL, Redis, MeiliSearch)
+docker-compose up postgres redis meilisearch -d
 
 # Run database migrations
-pnpm prisma migrate dev
+pnpm db:migrate
+
+# Seed database with test data
+pnpm db:seed
 
 # Start development servers
 pnpm dev

@@ -1,0 +1,207 @@
+{
+  \"version\": \"2.0.0\",
+  \"tasks\": [
+    {
+      \"label\": \"🐳 Docker: Setup Development Environment\",
+      \"type\": \"shell\",
+      \"command\": \"./dev.sh\",
+      \"args\": [\"setup\"],
+      \"group\": {
+        \"kind\": \"build\",
+        \"isDefault\": false
+      },
+      \"presentation\": {
+        \"echo\": true,
+        \"reveal\": \"always\",
+        \"focus\": false,
+        \"panel\": \"shared\",
+        \"showReuseMessage\": true,
+        \"clear\": false
+      },
+      \"problemMatcher\": []
+    },
+    {
+      \"label\": \"🚀 Docker: Start Development Environment\",
+      \"type\": \"shell\",
+      \"command\": \"./dev.sh\",
+      \"args\": [\"start\"],
+      \"group\": {
+        \"kind\": \"build\",
+        \"isDefault\": true
+      },
+      \"presentation\": {
+        \"echo\": true,
+        \"reveal\": \"always\",
+        \"focus\": false,
+        \"panel\": \"shared\",
+        \"showReuseMessage\": true,
+        \"clear\": false
+      },
+      \"problemMatcher\": []
+    },
+    {
+      \"label\": \"🛑 Docker: Stop Development Environment\",
+      \"type\": \"shell\",
+      \"command\": \"./dev.sh\",
+      \"args\": [\"stop\"],
+      \"group\": \"build\",
+      \"presentation\": {
+        \"echo\": true,
+        \"reveal\": \"always\",
+        \"focus\": false,
+        \"panel\": \"shared\",
+        \"showReuseMessage\": true,
+        \"clear\": false
+      },
+      \"problemMatcher\": []
+    },
+    {
+      \"label\": \"📊 Docker: Show Status\",
+      \"type\": \"shell\",
+      \"command\": \"./dev.sh\",
+      \"args\": [\"status\"],
+      \"group\": \"test\",
+      \"presentation\": {
+        \"echo\": true,
+        \"reveal\": \"always\",
+        \"focus\": false,
+        \"panel\": \"shared\",
+        \"showReuseMessage\": true,
+        \"clear\": false
+      },
+      \"problemMatcher\": []
+    },
+    {
+      \"label\": \"📝 Docker: View All Logs\",
+      \"type\": \"shell\",
+      \"command\": \"./dev.sh\",
+      \"args\": [\"logs\"],
+      \"group\": \"test\",
+      \"presentation\": {
+        \"echo\": true,
+        \"reveal\": \"always\",
+        \"focus\": true,
+        \"panel\": \"dedicated\",
+        \"showReuseMessage\": false,
+        \"clear\": true
+      },
+      \"isBackground\": true,
+      \"problemMatcher\": []
+    },
+    {
+      \"label\": \"🗄️ Database: Run Migrations\",
+      \"type\": \"shell\",
+      \"command\": \"./dev.sh\",
+      \"args\": [\"db-migrate\"],
+      \"group\": \"build\",
+      \"presentation\": {
+        \"echo\": true,
+        \"reveal\": \"always\",
+        \"focus\": false,
+        \"panel\": \"shared\",
+        \"showReuseMessage\": true,
+        \"clear\": false
+      },
+      \"problemMatcher\": []
+    },
+    {
+      \"label\": \"🌱 Database: Seed Data\",
+      \"type\": \"shell\",
+      \"command\": \"./dev.sh\",
+      \"args\": [\"db-seed\"],
+      \"group\": \"build\",
+      \"presentation\": {
+        \"echo\": true,
+        \"reveal\": \"always\",
+        \"focus\": false,
+        \"panel\": \"shared\",
+        \"showReuseMessage\": true,
+        \"clear\": false
+      },
+      \"problemMatcher\": []
+    },
+    {
+      \"label\": \"🧪 Test: API\",
+      \"type\": \"shell\",
+      \"command\": \"pnpm\",
+      \"args\": [\"--filter\", \"@titan-pomade/api\", \"test\"],
+      \"group\": {
+        \"kind\": \"test\",
+        \"isDefault\": true
+      },
+      \"presentation\": {
+        \"echo\": true,
+        \"reveal\": \"always\",
+        \"focus\": false,
+        \"panel\": \"shared\",
+        \"showReuseMessage\": true,
+        \"clear\": false
+      },
+      \"problemMatcher\": [\"$tsc\"]
+    },
+    {
+      \"label\": \"🧪 Test: Web\",
+      \"type\": \"shell\",
+      \"command\": \"pnpm\",
+      \"args\": [\"--filter\", \"@titan-pomade/web\", \"test\"],
+      \"group\": \"test\",
+      \"presentation\": {
+        \"echo\": true,
+        \"reveal\": \"always\",
+        \"focus\": false,
+        \"panel\": \"shared\",
+        \"showReuseMessage\": true,
+        \"clear\": false
+      },
+      \"problemMatcher\": [\"$tsc\"]
+    },
+    {
+      \"label\": \"🔧 Lint: All\",
+      \"type\": \"shell\",
+      \"command\": \"pnpm\",
+      \"args\": [\"lint\"],
+      \"group\": \"test\",
+      \"presentation\": {
+        \"echo\": true,
+        \"reveal\": \"always\",
+        \"focus\": false,
+        \"panel\": \"shared\",
+        \"showReuseMessage\": true,
+        \"clear\": false
+      },
+      \"problemMatcher\": [\"$eslint-stylish\"]
+    },
+    {
+      \"label\": \"💅 Format: All\",
+      \"type\": \"shell\",
+      \"command\": \"pnpm\",
+      \"args\": [\"format\"],
+      \"group\": \"build\",
+      \"presentation\": {
+        \"echo\": true,
+        \"reveal\": \"always\",
+        \"focus\": false,
+        \"panel\": \"shared\",
+        \"showReuseMessage\": true,
+        \"clear\": false
+      },
+      \"problemMatcher\": []
+    },
+    {
+      \"label\": \"🏗️ Build: All\",
+      \"type\": \"shell\",
+      \"command\": \"pnpm\",
+      \"args\": [\"build\"],
+      \"group\": \"build\",
+      \"presentation\": {
+        \"echo\": true,
+        \"reveal\": \"always\",
+        \"focus\": false,
+        \"panel\": \"shared\",
+        \"showReuseMessage\": true,
+        \"clear\": false
+      },
+      \"problemMatcher\": [\"$tsc\"]
+    }
+  ]
+}"

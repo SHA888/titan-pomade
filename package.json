@@ -13,7 +13,19 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently \"pnpm --filter @titan-pomade/web dev\" \"pnpm --filter @titan-pomade/api start:dev\"",
     "build": "pnpm --filter @titan-pomade/web build && pnpm --filter @titan-pomade/api build",
-    "start": "node dist/apps/api/main.js"
+    "start": "node dist/apps/api/main.js",
+    "docker:setup": "./dev.sh setup",
+    "docker:dev": "./dev.sh start",
+    "docker:stop": "./dev.sh stop",
+    "docker:restart": "./dev.sh restart",
+    "docker:clean": "./dev.sh clean",
+    "docker:logs": "./dev.sh logs",
+    "docker:status": "./dev.sh status",
+    "docker:build": "./dev.sh build",
+    "db:migrate": "pnpm --filter @titan-pomade/api db:migrate",
+    "db:seed": "pnpm --filter @titan-pomade/api db:seed",
+    "db:studio": "pnpm --filter @titan-pomade/api db:studio",
+    "db:reset": "./dev.sh db-reset"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
