@@ -462,6 +462,75 @@ Please use the [GitHub Issues](https://github.com/yourusername/titan-pomade/issu
 - [Railway](https://railway.app/) - For backend and database
 - [Docker Swarm/Kubernetes](https://docs.docker.com/get-started/orchestration/) - For container orchestration
 
+## 📦 Using GHCR (GitHub Container Registry) and Manual Deploy
+
+This template ships with two GitHub Actions workflows:
+
+- `CI` at `.github/workflows/ci-cd.yml` (runs on push/PR to main/develop)
+- `Deploy` at `.github/workflows/deploy.yml` (manual only; safe for templates)
+
+### 1) Enable GHCR publishing
+
+- Go to GitHub: `Settings -> Actions -> General -> Workflow permissions`
+  - Set to: "Read and write permissions" and enable "Allow GitHub Actions to create and approve pull requests" (optional)
+- Ensure Packages are enabled for your org/repo (GHCR).
+- No extra secrets are required for GHCR push; the provided `GITHUB_TOKEN` is used.
+
+Images will be published as:
+
+- `ghcr.io/<owner>/<repo>-api`
+- `ghcr.io/<owner>/<repo>-web`
+
+Tags include `stg-<sha>` / `prod-<sha>` and `latest`.
+
+### 2) Optional database secrets for migrations
+
+The Deploy workflow runs Prisma migrations only if the corresponding secret exists:
+
+- `DATABASE_URL_STAGING`
+- `DATABASE_URL_PROD`
+
+If these secrets are not set (common for templates), migrations are skipped gracefully.
+
+### 3) Run the manual Deploy workflow
+
+1. Open the GitHub repo → `Actions` tab
+2. Select `Deploy`
+3. Click `Run workflow` and choose an environment value:
+   - `staging` (uses `DATABASE_URL_STAGING` if present)
+   - `production` (uses `DATABASE_URL_PROD` if present)
+
+The workflow will:
+
+- Build and push Docker images for API and Web to GHCR
+- Optionally run DB migrations if the env secret is present
+- Optionally notify Slack if `SLACK_WEBHOOK_URL` secret is set
+
+### 4) Pull and run images locally (optional)
+
+```bash
+# Authenticate to GHCR (if needed for private images)
+echo $GHCR_TOKEN | docker login ghcr.io -u <your-gh-username> --password-stdin
+
+# Pull latest images
+docker pull ghcr.io/<owner>/<repo>-api:latest
+docker pull ghcr.io/<owner>/<repo>-web:latest
+
+# Example: run API container
+docker run -p 5000:5000 \
+  -e NODE_ENV=production \
+  -e DATABASE_URL="postgresql://user:pass@host:5432/db" \
+  ghcr.io/<owner>/<repo>-api:latest
+
+# Example: run Web container
+docker run -p 3000:3000 \
+  -e NODE_ENV=production \
+  -e NEXT_PUBLIC_API_URL="http://localhost:5000" \
+  ghcr.io/<owner>/<repo>-web:latest
+```
+
+Tip: You can also adapt `docker/prod/docker-compose.yml` to point at GHCR images by setting the `image:` fields and removing the `build:` blocks.
+
 ## 🗺 Roadmap
 
 ### Upcoming Features
