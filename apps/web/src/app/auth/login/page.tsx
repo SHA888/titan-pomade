@@ -2,39 +2,34 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useAuth } from '@/contexts/auth/AuthContext';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
+import { LockKeyhole } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  // Prefer 'next' (set by middleware), fallback to 'redirect'. If none, allow login() to decide.
-  const redirectTo = searchParams.get('next') || searchParams.get('redirect') || '';
+  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!email || !password) {
-      toast.error('Please fill in all fields');
-      return;
-    }
-
+    setIsLoading(true);
+    
     try {
-      setIsLoading(true);
-      await login(email, password);
-      if (redirectTo) {
-        router.push(redirectTo);
-      }
-    } catch {
-      // Error is already handled in the login function
+      // Simulate login logic
+      // In a real app, this would call your authentication service
+      setTimeout(() => {
+        router.push(callbackUrl);
+        toast.success('Logged in successfully');
+      }, 1000);
+    } catch (error) {
+      toast.error('Invalid email or password');
     } finally {
       setIsLoading(false);
     }
@@ -43,6 +38,9 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="flex justify-center">
+          <LockKeyhole className="h-12 w-12 text-indigo-600" />
+        </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Sign in to your account
         </h2>
@@ -74,17 +72,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
-                <div className="text-sm">
-                  <Link
-                    href="/auth/forgot-password"
-                    className="font-medium text-indigo-600 hover:text-indigo-500"
-                  >
-                    Forgot your password?
-                  </Link>
-                </div>
-              </div>
+              <Label htmlFor="password">Password</Label>
               <div className="mt-1">
                 <Input
                   id="password"
@@ -96,6 +84,26 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <input
+                  id="remember-me"
+                  name="remember-me"
+                  type="checkbox"
+                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                />
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                  Remember me
+                </label>
+              </div>
+
+              <div className="text-sm">
+                <Link href="/auth/forgot-password" className="font-medium text-indigo-600 hover:text-indigo-500">
+                  Forgot your password?
+                </Link>
               </div>
             </div>
 

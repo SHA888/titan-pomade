@@ -2,10 +2,174 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Test class to verify Tailwind is working */
-.test-tailwind {
-  @apply text-red-500 font-bold;
-  content: 'Tailwind is working!';
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.5rem;
+    
+    /* Typography scale */
+    --font-size-xs: 0.75rem;     /* 12px */
+    --font-size-sm: 0.875rem;    /* 14px */
+    --font-size-base: 1rem;      /* 16px */
+    --font-size-lg: 1.125rem;    /* 18px */
+    --font-size-xl: 1.25rem;     /* 20px */
+    --font-size-2xl: 1.5rem;     /* 24px */
+    --font-size-3xl: 1.875rem;   /* 30px */
+    --font-size-4xl: 2.25rem;    /* 36px */
+    --font-size-5xl: 3rem;       /* 48px */
+    --font-size-6xl: 3.75rem;    /* 60px */
+    --font-size-7xl: 4.5rem;     /* 72px */
+    
+    /* Line heights */
+    --line-height-tight: 1.25;
+    --line-height-snug: 1.375;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.625;
+    --line-height-loose: 2;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+  }
+
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 100%; /* Prevent iOS and IE text size adjust after device orientation change, without disabling user zoom. */
+  }
+  
+  body {
+    @apply bg-background text-foreground min-h-screen;
+    font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Better default spacing for elements */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+  }
+  
+  h1 {
+    font-size: var(--font-size-4xl);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.02em;
+  }
+  
+  h2 {
+    font-size: var(--font-size-3xl);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.015em;
+  }
+  
+  h3 {
+    font-size: var(--font-size-2xl);
+    line-height: var(--line-height-snug);
+    letter-spacing: -0.01em;
+  }
+  
+  h4 {
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-snug);
+  }
+  
+  h5 {
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-normal);
+  }
+  
+  h6 {
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+  }
+  
+  p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+  
+  ul, ol {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+  }
+  
+  li {
+    margin-bottom: 0.25rem;
+  }
+  
+  li > ul,
+  li > ol {
+    margin-top: 0.25rem;
+    margin-bottom: 0;
+  }
+  
+  /* Smooth scrolling for the whole app */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Selection styling */
+  ::selection {
+    @apply bg-primary/20 text-primary-foreground;
+  }
+  
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50;
+  }
 }
 
 @layer utilities {
@@ -69,143 +233,39 @@
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80;
   }
-}
-
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-  }
-
-  * {
-    @apply border-border;
+  
+  /* Typography utilities */
+  .text-display {
+    @apply font-bold tracking-tight;
+    letter-spacing: -0.025em;
   }
   
-  html {
-    scroll-behavior: smooth;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  .text-heading {
+    @apply font-bold tracking-tight;
   }
   
-  body {
-    @apply bg-background text-foreground min-h-screen;
-  }
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+  .text-body {
+    @apply font-normal;
+    letter-spacing: 0;
   }
   
-  /* Smooth scrolling for the whole app */
-  html {
-    scroll-behavior: smooth;
+  .text-lead {
+    @apply text-lg text-muted-foreground;
+    line-height: var(--line-height-relaxed);
   }
   
-  /* Selection styling */
-  ::selection {
-    @apply bg-primary/20 text-primary-foreground;
+  .text-muted {
+    @apply text-muted-foreground;
   }
   
-  /* Scrollbar styling */
-  ::-webkit-scrollbar {
-    @apply w-2 h-2;
+  .text-small {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
   }
   
-  ::-webkit-scrollbar-track {
-    @apply bg-background;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    @apply bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50;
+  .text-tiny {
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-tight);
   }
 }
 
@@ -233,10 +293,80 @@
   .input {
     @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-ring disabled:cursor-not-allowed disabled:opacity-50;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  
+  /* Typography components */
+  .display-0 {
+    font-size: var(--font-size-7xl);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.03em;
+    @apply font-bold tracking-tight;
+  }
+  
+  .display-1 {
+    font-size: var(--font-size-6xl);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.025em;
+    @apply font-bold tracking-tight;
+  }
+  
+  .display-2 {
+    font-size: var(--font-size-5xl);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.02em;
+    @apply font-bold tracking-tight;
+  }
+  
+  .display-3 {
+    font-size: var(--font-size-4xl);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.015em;
+    @apply font-bold tracking-tight;
+  }
+  
+  .heading-1 {
+    font-size: var(--font-size-3xl);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.015em;
+    @apply font-bold tracking-tight;
+  }
+  
+  .heading-2 {
+    font-size: var(--font-size-2xl);
+    line-height: var(--line-height-snug);
+    letter-spacing: -0.01em;
+    @apply font-bold tracking-tight;
+  }
+  
+  .heading-3 {
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-snug);
+    @apply font-bold tracking-tight;
+  }
+  
+  .heading-4 {
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-normal);
+    @apply font-bold;
+  }
+  
+  .body-large {
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-relaxed);
+  }
+  
+  .body-normal {
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+  }
+  
+  .body-small {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+  }
+  
+  .caption {
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-normal);
+    @apply text-muted-foreground;
+  }
 }

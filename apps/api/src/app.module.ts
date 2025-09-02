@@ -14,6 +14,9 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
 import { SearchModule } from './search/search.module';
+import { ProductsModule } from './modules/products/products.module';
+import { UsersModule } from './modules/users/users.module';
+import { OrdersModule } from './modules/orders/orders.module';
 
 @Module({
   imports: [
@@ -22,6 +25,9 @@ import { SearchModule } from './search/search.module';
     AuthModule,
     AdminModule,
     SearchModule,
+    ProductsModule,
+    UsersModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [
@@ -80,10 +86,21 @@ export class AppModule {
 
   private setupSwaggerDocs(app: INestApplication): void {
     const config = new DocumentBuilder()
-      .setTitle('API Documentation')
-      .setDescription('API Documentation')
+      .setTitle('Titan Pomade API')
+      .setDescription(
+        'Complete API documentation for the Titan Pomade e-commerce platform',
+      )
       .setVersion('1.0')
       .addBearerAuth()
+      .addTag(
+        'Authentication',
+        'User authentication and authorization endpoints',
+      )
+      .addTag('Users', 'User management endpoints')
+      .addTag('Products', 'Product management endpoints')
+      .addTag('Orders', 'Order management endpoints')
+      .addTag('Admin', 'Administrative endpoints')
+      .addTag('Search', 'Search functionality endpoints')
       .build();
 
     const document = SwaggerModule.createDocument(app, config);

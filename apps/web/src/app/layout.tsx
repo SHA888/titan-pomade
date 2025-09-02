@@ -79,6 +79,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
         GeistSans.variable,
         GeistMono.variable
       )}
+      style={{
+        '--font-geist-sans': GeistSans.style.fontFamily,
+        '--font-geist-mono': GeistMono.style.fontFamily,
+      } as React.CSSProperties}
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-background text-foreground">
