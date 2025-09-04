@@ -90,7 +90,7 @@ export class AppModule {
       .setDescription(
         'Complete API documentation for the Titan Pomade e-commerce platform',
       )
-      .setVersion('1.0')
+      .setVersion(this.configService.get<string>('app.api.version', '1.0'))
       .addBearerAuth()
       .addTag(
         'Authentication',

@@ -1,247 +1,136 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from '../ui/table';
-import { 
-  Pagination, 
-  PaginationContent, 
-  PaginationItem, 
-  PaginationLink, 
-  PaginationNext, 
-  PaginationPrevious 
-} from '../ui/pagination';
-import { Skeleton } from '../ui/skeleton';
-import { Search } from 'lucide-react';
+import React from 'react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 interface Column<T> {
-  key: keyof T;
+  key: keyof T | string;
   title: string;
   render?: (value: any, row: T) => React.ReactNode;
+  className?: string;
 }
 
 interface DataTableProps<T> {
   data: T[];
   columns: Column<T>[];
+  onEdit?: (item: T) => void;
+  onDelete?: (item: T) => void;
   loading?: boolean;
-  pagination?: {
-    page: number;
-    totalPages: number;
-    total: number;
-    limit: number;
-    onPageChange: (page: number) => void;
-  };
-  onRowClick?: (row: T) => void;
-  search?: {
-    placeholder?: string;
-    onSearch: (query: string) => void;
-  };
-  actions?: {
+  className?: string;
+  emptyState?: React.ReactNode;
+  onRowClick?: (item: T) => void;
+  actions?: Array<{
     label: string;
-    onClick: (row: T) => void;
-  }[];
+    onClick: (item: T) => void;
+  }>;
 }
 
-export function DataTable<T extends { id: string }>({
+export function DataTable<T extends { id: string | number }>({
   data,
   columns,
+  onEdit,
+  onDelete,
   loading = false,
-  pagination,
+  className,
+  emptyState,
   onRowClick,
-  search,
   actions,
 }: DataTableProps<T>) {
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    search?.onSearch(searchQuery);
-  };
-
   if (loading) {
     return (
-      <div className="space-y-4">
-        {search && (
-          <div className="flex justify-between">
-            <Skeleton className="h-10 w-64" />
-            <Skeleton className="h-10 w-24" />
-          </div>
-        )}
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableHead key={String(column.key)}>
-                    <Skeleton className="h-4 w-20" />
-                  </TableHead>
-                ))}
-                {actions && <TableHead><Skeleton className="h-4 w-20" /></TableHead>}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {[...Array(5)].map((_, i) => (
-                <TableRow key={i}>
-                  {columns.map((_, j) => (
-                    <TableCell key={j}>
-                      <Skeleton className="h-4 w-32" />
-                    </TableCell>
-                  ))}
-                  {actions && (
-                    <TableCell>
-                      <Skeleton className="h-8 w-16" />
-                    </TableCell>
-                  )}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-        {pagination && (
-          <div className="flex justify-center">
-            <Skeleton className="h-10 w-64" />
-          </div>
-        )}
+      <div className={cn("space-y-4", className)}>
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className="h-12 w-full bg-muted rounded animate-pulse" />
+        ))}
+      </div>
+    );
+  }
+
+  if (data.length === 0) {
+    return (
+      <div className={cn("flex items-center justify-center py-12 text-muted-foreground", className)}>
+        {emptyState || "No data available"}
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
-      {(search || actions?.some(a => a.label === 'Create')) && (
-        <div className="flex justify-between">
-          {search && (
-            <form onSubmit={handleSearch} className="flex w-64">
-              <div className="relative w-full">
-                <Input
-                  placeholder={search.placeholder || 'Search...'}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              </div>
-            </form>
-          )}
-          <div className="flex space-x-2">
-            {actions?.filter(a => a.label === 'Create').map((action, index) => (
-              <Button key={index} onClick={() => action.onClick(null as any)}>
-                {action.label}
-              </Button>
+    <div className={cn("rounded-md border", className)}>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            {columns.map((column) => (
+              <TableHead key={String(column.key)} className={column.className}>
+                {column.title}
+              </TableHead>
             ))}
-          </div>
-        </div>
-      )}
-
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
+            {(onEdit || onDelete) && <TableHead className="text-right">Actions</TableHead>}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data.map((row) => (
+            <TableRow 
+              key={row.id}
+              className={onRowClick ? 'cursor-pointer hover:bg-muted/50' : ''}
+              onClick={onRowClick ? () => onRowClick(row) : undefined}
+            >
               {columns.map((column) => (
-                <TableHead key={String(column.key)}>{column.title}</TableHead>
+                <TableCell key={String(column.key)} className={column.className}>
+                  {column.render 
+                    ? column.render(row[column.key as keyof T], row) 
+                    : String(row[column.key as keyof T] ?? '')
+                  }
+                </TableCell>
               ))}
-              {actions && actions.some(a => a.label !== 'Create') && (
-                <TableHead className="text-right">Actions</TableHead>
+              {((onEdit || onDelete) || actions) && (
+                <TableCell className="text-right">
+                  <div className="flex justify-end space-x-2">
+                    {onEdit && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEdit(row);
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    )}
+                    {onDelete && (
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDelete(row);
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    )}
+                    {actions && actions.map((action, index) => (
+                      <Button
+                        key={index}
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          action.onClick(row);
+                        }}
+                      >
+                        {action.label}
+                      </Button>
+                    ))}
+                  </div>
+                </TableCell>
               )}
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={columns.length + (actions ? 1 : 0)} className="text-center py-10">
-                  No data found
-                </TableCell>
-              </TableRow>
-            ) : (
-              data.map((row) => (
-                <TableRow 
-                  key={row.id} 
-                  onClick={() => onRowClick?.(row)}
-                  className={onRowClick ? 'cursor-pointer hover:bg-muted/50' : ''}
-                >
-                  {columns.map((column) => (
-                    <TableCell key={String(column.key)}>
-                      {column.render 
-                        ? column.render(row[column.key], row)
-                        : String(row[column.key])
-                      }
-                    </TableCell>
-                  ))}
-                  {actions && actions.some(a => a.label !== 'Create') && (
-                    <TableCell className="text-right">
-                      <div className="flex justify-end space-x-2">
-                        {actions.filter(a => a.label !== 'Create').map((action, index) => (
-                          <Button
-                            key={index}
-                            variant="outline"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              action.onClick(row);
-                            }}
-                          >
-                            {action.label}
-                          </Button>
-                        ))}
-                      </div>
-                    </TableCell>
-                  )}
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
-
-      {pagination && (
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-muted-foreground">
-            Showing {Math.min((pagination.page - 1) * pagination.limit + 1, pagination.total)} to{' '}
-            {Math.min(pagination.page * pagination.limit, pagination.total)} of {pagination.total} entries
-          </div>
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious 
-                  onClick={() => pagination.onPageChange(Math.max(1, pagination.page - 1))}
-                  className={pagination.page === 1 ? 'pointer-events-none opacity-50' : ''}
-                />
-              </PaginationItem>
-              
-              {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => {
-                const startPage = Math.max(1, Math.min(pagination.page - 2, pagination.totalPages - 4));
-                const page = startPage + i;
-                
-                return (
-                  <PaginationItem key={page}>
-                    <PaginationLink
-                      onClick={() => pagination.onPageChange(page)}
-                      isActive={pagination.page === page}
-                    >
-                      {page}
-                    </PaginationLink>
-                  </PaginationItem>
-                );
-              })}
-              
-              <PaginationItem>
-                <PaginationNext 
-                  onClick={() => pagination.onPageChange(Math.min(pagination.totalPages, pagination.page + 1))}
-                  className={pagination.page === pagination.totalPages ? 'pointer-events-none opacity-50' : ''}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </div>
-      )}
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }

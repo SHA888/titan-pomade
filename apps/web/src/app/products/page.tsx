@@ -123,10 +123,11 @@ export default function ProductsPage() {
               <DataTable
                 data={products}
                 columns={columns}
-                actions={[
+                /* actions={[
                   { label: 'Edit', onClick: (row) => console.log('Edit', row) },
                   { label: 'Delete', onClick: (row) => console.log('Delete', row) }
-                ]}
+                ]
+              */
               />
             </CardContent>
           </Card>

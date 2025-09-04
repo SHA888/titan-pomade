@@ -33,7 +33,7 @@ export default registerAs<AppConfig>('app', () => ({
   port: parseInt(process.env.PORT || '5000', 10),
   api: {
     prefix: process.env.API_PREFIX || 'api',
-    version: process.env.API_VERSION || '1',
+    version: process.env.API_VERSION || 'v1',
   },
   cors: {
     origin: process.env.CORS_ORIGIN?.split(',') || '*',

@@ -1,5 +1,6 @@
 import { api } from '../api';
 import { Product } from '@prisma/client';
+import { generateId } from '../utils';
 
 export interface ProductFormData {
   name: string;
@@ -68,6 +69,22 @@ class ProductsService {
 
   async getByCategory(category: string): Promise<Product[]> {
     return api.get<Product[]>(`/products/category/${category}`);
+  }
+  
+  // Helper method to create an optimistic product for UI updates
+  createOptimisticProduct(data: ProductFormData): any {
+    return {
+      id: `optimistic-${generateId()}`,
+      name: data.name,
+      description: data.description,
+      price: data.price,
+      stock: data.stock,
+      category: data.category,
+      isActive: data.isActive ?? true,
+      imageUrl: data.imageUrl ?? null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
   }
 }
 

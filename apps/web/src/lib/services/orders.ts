@@ -1,5 +1,6 @@
 import { api } from '../api';
 import { Order, OrderStatus } from '@prisma/client';
+import { generateId } from '../utils';
 
 export interface OrderItemDto {
   productId: string;
@@ -73,6 +74,21 @@ class OrdersService {
 
   async getByStatus(status: string): Promise<Order[]> {
     return api.get<Order[]>(`/orders/status/${status}`);
+  }
+  
+  // Helper method to create an optimistic order for UI updates
+  createOptimisticOrder(data: OrderFormData): any {
+    return {
+      id: `optimistic-${generateId()}`,
+      userId: data.userId,
+      items: data.items,
+      total: data.total,
+      status: data.status || OrderStatus.PENDING,
+      shippingAddress: data.shippingAddress || null,
+      paymentMethod: data.paymentMethod || null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
   }
 }
 

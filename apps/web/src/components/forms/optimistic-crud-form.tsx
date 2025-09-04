@@ -16,27 +16,35 @@ interface FormField {
   defaultValue?: any;
 }
 
-interface CrudFormProps {
+interface OptimisticCrudFormProps {
   fields: FormField[];
-  onSubmit: (data: Record<string, any>) => Promise<void>;
+  onSubmit: (data: Record<string, any>) => Promise<any>;
+  onSuccess?: (result: any) => void;
+  onError?: (error: unknown) => void;
   onCancel?: () => void;
   submitLabel?: string;
   cancelLabel?: string;
   initialData?: Record<string, any>;
   className?: string;
   disabled?: boolean;
+  mode: 'create' | 'update';
+  itemId?: string;
 }
 
-export function CrudForm({
+export function OptimisticCrudForm({
   fields,
   onSubmit,
+  onSuccess,
+  onError,
   onCancel,
   submitLabel = 'Submit',
   cancelLabel = 'Cancel',
   initialData = {},
   className,
   disabled = false,
-}: CrudFormProps) {
+  mode,
+  itemId,
+}: OptimisticCrudFormProps) {
   const [formData, setFormData] = useState<Record<string, any>>(() => {
     const data: Record<string, any> = {};
     fields.forEach(field => {
@@ -55,9 +63,10 @@ export function CrudForm({
     setLoading(true);
     
     try {
-      await onSubmit(formData);
+      const result = await onSubmit(formData);
+      onSuccess?.(result);
     } catch (error) {
-      console.error('Form submission error:', error);
+      onError?.(error);
       throw error;
     } finally {
       setLoading(false);
@@ -151,7 +160,7 @@ export function CrudForm({
           </Button>
         )}
         <Button type="submit" disabled={loading || disabled}>
-          {loading ? 'Submitting...' : submitLabel}
+          {loading ? (mode === 'create' ? 'Creating...' : 'Updating...') : (submitLabel || (mode === 'create' ? 'Create' : 'Update'))}
         </Button>
       </div>
     </form>

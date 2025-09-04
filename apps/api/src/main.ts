@@ -14,6 +14,11 @@ async function bootstrap() {
     // Get config service
     const configService = app.get(ConfigService);
 
+    // Set up API versioning
+    const apiPrefix = configService.get<string>('app.api.prefix', 'api');
+    const apiVersion = configService.get<string>('app.api.version', 'v1');
+    app.setGlobalPrefix(`${apiPrefix}/${apiVersion}`);
+
     // Enable CORS if needed
     app.enableCors();
 
@@ -24,7 +29,6 @@ async function bootstrap() {
       appModule.setupSwagger(app);
 
       // Log Swagger URL
-      const apiPrefix = configService.get<string>('app.api.prefix', 'api');
       logger.log(
         `Swagger documentation available at http://localhost:${port}/${apiPrefix}/docs`,
       );
@@ -32,7 +36,7 @@ async function bootstrap() {
 
     // Start the application
     await app.listen(port);
-    logger.log(`Application is running on: http://localhost:${port}`);
+    logger.log(`Application is running on: http://localhost:${port}/${apiPrefix}/${apiVersion}`);
   } catch (error) {
     logger.error('Failed to start the application', error);
     process.exit(1);

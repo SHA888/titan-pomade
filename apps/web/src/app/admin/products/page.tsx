@@ -31,7 +31,6 @@ export default function ProductsPage() {
     { name: 'stock', label: 'Stock', type: 'number' as const, required: true },
     { name: 'category', label: 'Category', type: 'text' as const, required: true },
     { name: 'imageUrl', label: 'Image URL', type: 'text' as const },
-    { name: 'isActive', label: 'Active', type: 'checkbox' as const },
   ];
 
   useEffect(() => {
@@ -60,9 +59,9 @@ export default function ProductsPage() {
     }
   };
 
-  const handleCreate = async (data: ProductFormData) => {
+  const handleCreate = async (data: Record<string, any>) => {
     try {
-      await productsService.create(data);
+      await productsService.create(data as ProductFormData);
       setDialogOpen(false);
       fetchProducts();
       toast.success('Product created successfully');
@@ -72,11 +71,11 @@ export default function ProductsPage() {
     }
   };
 
-  const handleUpdate = async (data: Partial<ProductFormData>) => {
+  const handleUpdate = async (data: Record<string, any>) => {
     if (!editingProduct) return;
     
     try {
-      await productsService.update(editingProduct.id, data);
+      await productsService.update(editingProduct.id, data as Partial<ProductFormData>);
       setDialogOpen(false);
       setEditingProduct(null);
       fetchProducts();
@@ -192,19 +191,11 @@ export default function ProductsPage() {
               },
             ]}
             loading={loading}
-            pagination={{
-              ...pagination,
-              onPageChange: handlePageChange,
-            }}
-            search={{
-              placeholder: 'Search products...',
-              onSearch: handleSearch,
-            }}
             actions={[
-              { label: 'Edit', onClick: handleEdit },
-              { label: 'Delete', onClick: handleDelete },
+              { label: 'Edit', onClick: (row: any) => handleEdit(row) },
+              { label: 'Delete', onClick: (row: any) => handleDelete(row) },
             ]}
-            onRowClick={(product) => router.push(`/admin/products/${product.id}`)}
+            onRowClick={(product: Product) => router.push(`/admin/products/${product.id}`)}
           />
         </CardContent>
       </Card>

@@ -1,5 +1,6 @@
 import { api } from '../api';
 import { User, Role } from '@prisma/client';
+import { generateId } from '../utils';
 
 export interface UserFormData {
   email: string;
@@ -60,6 +61,19 @@ class UsersService {
 
   async delete(id: string): Promise<void> {
     return api.delete<void>(`/users/${id}`);
+  }
+  
+  // Helper method to create an optimistic user for UI updates
+  createOptimisticUser(data: UserFormData): any {
+    return {
+      id: `optimistic-${generateId()}`,
+      email: data.email,
+      name: data.name || null,
+      role: data.role || Role.USER,
+      isEmailVerified: data.isEmailVerified || false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
   }
 }
 
